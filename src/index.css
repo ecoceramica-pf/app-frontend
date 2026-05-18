@@ -1,11 +1,52 @@
-/* Define explicitamente a ordem das camadas do CSS (Cascade Layers).
-   Isso garante que as classes utilitárias do Tailwind (utilities) sempre vençam
-   os componentes do PrimeReact, permitindo customizações ágeis via className. */
-@layer theme, base, primereact, utilities;
-
-/* Injeta os estilos globais, reset e classes utilitárias nativas do Tailwind v4. */
 @import "tailwindcss";
 
-/* Importa o tema desejado do PrimeReact, enclausurando-o em sua camada 
-   específica ('primereact') para preservar a prioridade de estilos. */
-@import 'primereact/resources/themes/lara-light-blue/theme.css' layer(primereact);
+/* O Tailwind v4 NÃO escaneia node_modules por padrão.
+   Como o PrimeReact no modo unstyled usa classes Tailwind definidas no passthrough
+   (ex: p-5 no body do Card), precisamos dizer ao JIT para escaneá-las. */
+@source "../node_modules/primereact/**/*.{js,cjs,mjs}";
+
+/* Ensina o Tailwind v4 a usar a classe .dark no <html> para ativar o dark mode.
+   Isso alinha com o toggle no DarkModeToggle.jsx que adiciona/remove .dark */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Base layer — estilos globais da aplicação
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@layer base {
+  html {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Transição suave ao trocar de tema */
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: background-color 0.4s ease,
+                color 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease !important;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+  }
+
+  /* Scrollbar estilizada */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+}
