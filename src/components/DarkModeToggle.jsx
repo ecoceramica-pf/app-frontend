@@ -3,7 +3,7 @@ import { Button } from 'primereact/button';
 
 /**
  * DarkModeToggle — Botão elegante para alternar dark/light mode.
- * 
+ *
  * Funcionalidades:
  *   • Persiste a preferência no localStorage
  *   • Detecta prefers-color-scheme no primeiro acesso
