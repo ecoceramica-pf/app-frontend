@@ -45,7 +45,7 @@ export function DarkModeToggle() {
   };
 
   return (
-    <div className="fixed top-5 right-5 z-50">
+    <div className="fixed bottom-5 left-5 z-[9999]">
       <Button
         icon={isDark ? 'pi pi-sun' : 'pi pi-moon'}
         rounded
