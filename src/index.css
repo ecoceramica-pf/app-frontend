@@ -5,6 +5,19 @@
    (ex: p-5 no body do Card), precisamos dizer ao JIT para escaneá-las. */
 @source "../node_modules/primereact/**/*.{js,cjs,mjs}";
 
+@theme {
+  --color-primary: #1B3994;
+  --color-secondary: #60941B;
+  --color-detail: #93321A;
+  --color-surface: #f8f9fa;
+  --color-text-main: #333333;
+  --font-sans: "Montserrat", sans-serif;
+  --radius-card: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
 /* Ensina o Tailwind v4 a usar a classe .dark no <html> para ativar o dark mode.
    Isso alinha com o toggle no DarkModeToggle.jsx que adiciona/remove .dark */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -14,7 +27,7 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 @layer base {
   html {
-    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
