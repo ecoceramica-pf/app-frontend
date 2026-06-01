@@ -100,12 +100,12 @@ export const CadastrarResiduo = () => {
   let enderecoStr = 'Endereço não definido';
   if (formData.endereco) {
     if (formData.endereco.tipo === 'novo' && formData.endereco.dados) {
-      const { logradouro, numero, bairro, cidade } = formData.endereco.dados;
-      enderecoStr = `${logradouro}, ${numero} - ${bairro}, ${cidade}`;
+      const { logradouro, numero, bairro, cidade, estado, complemento } = formData.endereco.dados;
+      enderecoStr = `${logradouro}, ${numero}${complemento ? ` (${complemento})` : ''} - ${bairro}, ${cidade} - ${estado || 'SP'}`;
     } else if (formData.endereco.tipo === 'existente') {
       const end = enderecos.find(e => e.id == formData.endereco.id);
       if (end) {
-        enderecoStr = `${end.logradouro}, ${end.numero} - ${end.bairro}, ${end.cidade}`;
+        enderecoStr = `${end.logradouro}, ${end.numero}${end.complemento ? ` (${end.complemento})` : ''} - ${end.bairro}, ${end.cidade} - ${end.estado || 'SP'}`;
       }
     }
   }

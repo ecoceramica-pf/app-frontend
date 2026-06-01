@@ -12,8 +12,11 @@ export const EnderecoSelector = ({ enderecos = [], value, onChange }) => {
   const [novoEndereco, setNovoEndereco] = useState({
     logradouro: '',
     numero: '',
+    complemento: '',
+    cep: '',
     bairro: '',
-    cidade: 'Porto Ferreira'
+    cidade: 'Porto Ferreira',
+    estado: 'SP'
   });
 
   // Sincroniza estado local com o value inicial, se necessário (simplificado aqui)
@@ -32,8 +35,20 @@ export const EnderecoSelector = ({ enderecos = [], value, onChange }) => {
   };
 
   const handleNovoEnderecoChange = (e) => {
-    const { name, val } = e.target;
-    const updated = { ...novoEndereco, [name]: e.target.value };
+    const { name, value } = e.target;
+    let finalValue = value;
+
+    if (name === 'cep') {
+      let v = value.replace(/\D/g, '').substring(0, 8);
+      if (v.length > 5) {
+        v = v.replace(/^(\d{2})(\d{3})(\d)/, '$1.$2-$3');
+      } else if (v.length > 2) {
+        v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+      }
+      finalValue = v;
+    }
+
+    const updated = { ...novoEndereco, [name]: finalValue };
     setNovoEndereco(updated);
     onChange({ tipo: 'novo', dados: updated });
   };
@@ -72,6 +87,7 @@ export const EnderecoSelector = ({ enderecos = [], value, onChange }) => {
           </h4>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Linha 1 */}
             <div className="sm:col-span-2 flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Logradouro <span className="text-red-500">*</span></label>
               <input 
@@ -98,7 +114,33 @@ export const EnderecoSelector = ({ enderecos = [], value, onChange }) => {
               />
             </div>
 
+            {/* Linha 2 */}
             <div className="sm:col-span-2 flex flex-col gap-1">
+              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Complemento</label>
+              <input 
+                type="text" 
+                name="complemento" 
+                placeholder="Apto, Galpão, Bloco (opcional)"
+                value={novoEndereco.complemento}
+                onChange={handleNovoEnderecoChange}
+                className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md py-2 px-3 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">CEP</label>
+              <input 
+                type="text" 
+                name="cep" 
+                placeholder="00.000-000"
+                value={novoEndereco.cep}
+                onChange={handleNovoEnderecoChange}
+                className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md py-2 px-3 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+
+            {/* Linha 3 */}
+            <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Bairro <span className="text-red-500">*</span></label>
               <input 
                 type="text" 
@@ -119,8 +161,19 @@ export const EnderecoSelector = ({ enderecos = [], value, onChange }) => {
                 required={modo === 'novo'}
                 value={novoEndereco.cidade}
                 onChange={handleNovoEnderecoChange}
-                className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md py-2 px-3 text-sm text-gray-600 dark:text-gray-400 cursor-not-allowed"
-                readOnly
+                className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md py-2 px-3 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Estado <span className="text-red-500">*</span></label>
+              <input 
+                type="text" 
+                name="estado" 
+                required={modo === 'novo'}
+                value={novoEndereco.estado}
+                onChange={handleNovoEnderecoChange}
+                className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md py-2 px-3 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
               />
             </div>
           </div>
