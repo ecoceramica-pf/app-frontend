@@ -10,16 +10,11 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loadUserFromStorage = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        try {
-          const responseData = await authService.getMe();
-          setUser(responseData.data);
-        } catch (error) {
-          console.error('Falha ao validar token', error);
-          localStorage.removeItem('token');
-        }
+      try {
+        const responseData = await authService.getMe();
+        setUser(responseData.data);
+      } catch (error) {
+        console.error('Usuário não autenticado', error);
       }
       setLoading(false);
     };
@@ -29,13 +24,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const response = await authService.login(email, password);
-    const token = response?.data?.access_token;
     const userData = response?.data?.user;
-    
-    if (token) {
-        localStorage.setItem('token', token);
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-    }
+    // O cookie HttpOnly já foi definido pelo backend na resposta do login
 
     if (userData) {
         setUser(userData);
@@ -46,10 +36,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error('Erro ao fazer logout', error);
+    }
     setUser(null);
-    delete api.defaults.headers.Authorization;
   };
 
   const reloadUser = async () => {

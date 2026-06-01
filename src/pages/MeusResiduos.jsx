@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { Toast } from 'primereact/toast';
 import { ofertasService } from '../services/ofertasService';
 
 export const MeusResiduos = () => {
   const navigate = useNavigate();
   const [ofertas, setOfertas] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const toast = useRef(null);
 
   useEffect(() => {
     const fetchOfertas = async () => {
@@ -32,8 +35,19 @@ export const MeusResiduos = () => {
     }).format(new Date(isoDate));
   };
 
+  const formatarDataHora = (isoDate) => {
+    if (!isoDate) return '';
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    }).format(new Date(isoDate));
+  };
+
+
+
   return (
     <div className="max-w-6xl mx-auto flex flex-col gap-6">
+      <Toast ref={toast} />
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
@@ -115,7 +129,6 @@ export const MeusResiduos = () => {
                   </div>
                 </div>
 
-                {/* Card Footer */}
                 <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto flex gap-2">
                   <Button 
                     label="Gerenciar" 
@@ -123,7 +136,7 @@ export const MeusResiduos = () => {
                     iconPos="right"
                     outlined
                     className="w-full text-sm font-bold border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                    onClick={() => {/* Implementar navegação depois */}}
+                    onClick={() => navigate(`/meus-residuos/${oferta.id}/gerenciar`)}
                   />
                 </div>
               </div>

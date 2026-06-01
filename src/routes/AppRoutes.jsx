@@ -10,6 +10,8 @@ import { CadastrarResiduo } from '../pages/CadastrarResiduo';
 import { MuralOfertas } from '../pages/MuralOfertas';
 import { MeusResiduos } from '../pages/MeusResiduos';
 import { MinhasColetas } from '../pages/MinhasColetas';
+import { ConfiguracaoDisponibilidade } from '../pages/ConfiguracaoDisponibilidade';
+import { GerenciarOferta } from '../pages/GerenciarOferta';
 import { AppLayout } from '../components/layout/AppLayout';
 
 const PrivateRoute = ({ children }) => {
@@ -68,6 +70,17 @@ export const AppRoutes = () => {
         />
 
         <Route 
+          path="/disponibilidade" 
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <ConfiguracaoDisponibilidade />
+              </AppLayout>
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
           path="/mural" 
           element={
             <PrivateRoute>
@@ -84,6 +97,17 @@ export const AppRoutes = () => {
             <PrivateRoute>
               <AppLayout>
                 <MeusResiduos />
+              </AppLayout>
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/meus-residuos/:id/gerenciar" 
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <GerenciarOferta />
               </AppLayout>
             </PrivateRoute>
           } 
