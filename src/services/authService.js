@@ -3,7 +3,7 @@ import api from './api';
 export const authService = {
   initCsrf: async () => {
     // Busca o cookie CSRF da raiz, não do /api
-    const url = api.defaults.baseURL.replace('/api', '') + '/sanctum/csrf-cookie';
+    const url = api.defaults.baseURL.replace(/\/api\/?$/, '') + '/sanctum/csrf-cookie';
     await api.get(url);
   },
 
