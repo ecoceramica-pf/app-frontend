@@ -63,3 +63,17 @@
     background: #475569;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Utilitários Forçados do Tema
+   Resolve conflitos de CSS com o PrimeReact sem precisar usar !important no HTML
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.theme-btn-primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+.theme-btn-primary:hover {
+  background-color: color-mix(in srgb, var(--color-primary) 90%, transparent) !important;
+  border-color: color-mix(in srgb, var(--color-primary) 90%, transparent) !important;
+}
+

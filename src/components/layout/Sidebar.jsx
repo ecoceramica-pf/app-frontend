@@ -35,6 +35,12 @@ export const Sidebar = () => {
             icon: 'pi pi-plus',
             command: () => navigate('/cadastrar-residuo'),
             className: location.pathname === '/cadastrar-residuo' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
+          },
+          {
+            label: 'Configurar Disponibilidade',
+            icon: 'pi pi-calendar-times',
+            command: () => navigate('/disponibilidade'),
+            className: location.pathname === '/disponibilidade' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }
         ] : [
           {

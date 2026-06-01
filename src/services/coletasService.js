@@ -1,8 +1,10 @@
 import api from './api';
 
 export const coletasService = {
-  reservarColeta: async (ofertaId) => {
-    const response = await api.post(`/ofertas/${ofertaId}/reservar`);
+  reservarColeta: async (ofertaId, dataAgendamento) => {
+    const response = await api.post(`/ofertas/${ofertaId}/reservar`, {
+      data_agendamento: dataAgendamento
+    });
     return response.data;
   },
   minhasColetas: async () => {
