@@ -18,10 +18,10 @@ export const MuralOfertas = () => {
   // States para o Agendamento
   const [agendamentoStep, setAgendamentoStep] = useState(0); // 0 = Detalhes, 1 = Selecionar Data/Slot
   const [dataDesejada, setDataDesejada] = useState(null);
+  const [horaDesejada, setHoraDesejada] = useState(null);
   const [buscandoSlots, setBuscandoSlots] = useState(false);
   const [slotsData, setSlotsData] = useState(null);
   const [mensagemSlot, setMensagemSlot] = useState('');
-  const [slotSelecionado, setSlotSelecionado] = useState(null);
   const [agendando, setAgendando] = useState(false);
 
   const toast = useRef(null);
@@ -56,9 +56,9 @@ export const MuralOfertas = () => {
     setOfertaSelecionada(oferta);
     setAgendamentoStep(0);
     setDataDesejada(null);
+    setHoraDesejada(null);
     setSlotsData(null);
     setMensagemSlot('');
-    setSlotSelecionado(null);
   };
 
   const fecharModal = () => {
@@ -71,7 +71,7 @@ export const MuralOfertas = () => {
       const fetchSlots = async () => {
         setBuscandoSlots(true);
         setSlotsData(null);
-        setSlotSelecionado(null);
+        setHoraDesejada(null);
         try {
           // timezone offset correction para yyyy-mm-dd
           const dataStr = new Date(dataDesejada.getTime() - (dataDesejada.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
@@ -91,23 +91,24 @@ export const MuralOfertas = () => {
   }, [dataDesejada, agendamentoStep, ofertaSelecionada]);
 
   const handleAgendarColeta = async () => {
-    if (!ofertaSelecionada || !dataDesejada || !slotSelecionado) return;
+    if (!ofertaSelecionada || !dataDesejada || !horaDesejada) return;
     
     setAgendando(true);
     try {
       // Formar o YYYY-MM-DDTHH:mm:00
       const dataStr = new Date(dataDesejada.getTime() - (dataDesejada.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-      const dataHoraFim = `${dataStr}T${slotSelecionado.hora_inicio}:00`;
+      const horaStr = horaDesejada.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false });
+      const dataHoraFim = `${dataStr}T${horaStr}:00`;
 
       await coletasService.reservarColeta(ofertaSelecionada.id, dataHoraFim);
-      toast.current?.show({ severity: 'success', summary: 'Sucesso', detail: 'Coleta agendada com sucesso!', life: 4000 });
+      toast.current?.show({ severity: 'success', summary: 'Sucesso', detail: 'Sua proposta de coleta foi enviada e está aguardando aprovação da fábrica!', life: 4000 });
       setOfertas(ofertas.filter(o => o.id !== ofertaSelecionada.id));
       fecharModal();
     } catch (error) {
       console.error(error);
       let erroMsg = 'Falha ao agendar coleta. Tente novamente.';
       if (error.response?.status === 422) {
-        erroMsg = 'Os dados informados para o agendamento são inválidos.';
+        erroMsg = error.response.data.message || 'Os dados informados para o agendamento são inválidos.';
       } else if (error.response?.data?.message && !error.response.data.message.includes('field must be')) {
         erroMsg = error.response.data.message;
       }
@@ -213,7 +214,7 @@ export const MuralOfertas = () => {
         header={<span className="text-xl font-bold text-gray-800 dark:text-white">
           {agendamentoStep === 0 ? 'Detalhes do Resíduo' : 'Agendar Coleta'}
         </span>}
-        style={{ width: '95vw', maxWidth: '600px' }}
+        style={{ width: '95vw', maxWidth: '750px' }}
         draggable={false}
         resizable={false}
         modal
@@ -284,19 +285,20 @@ export const MuralOfertas = () => {
 
         {ofertaSelecionada && agendamentoStep === 1 && (
           <div className="flex flex-col gap-5 pt-2">
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg flex gap-4">
+            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg flex flex-col md:flex-row gap-4 md:gap-6">
               <div className="flex-1">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Selecione uma Data</label>
                 <Calendar 
                   value={dataDesejada} 
                   onChange={(e) => setDataDesejada(e.value)} 
                   dateFormat="dd/mm/yy" 
+                  minDate={minDate}
                   inline
                   className="w-full"
                 />
               </div>
               <div className="flex-1 flex flex-col border-l border-gray-200 dark:border-gray-700 pl-4">
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Horários Disponíveis</label>
+                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Seu Horário de Chegada</label>
                 
                 {!dataDesejada ? (
                   <div className="flex-1 flex items-center justify-center text-center text-sm text-gray-500 italic">
@@ -307,19 +309,37 @@ export const MuralOfertas = () => {
                     <ProgressSpinner style={{width: '30px', height: '30px'}} strokeWidth="4" />
                   </div>
                 ) : slotsData && slotsData.slots && slotsData.slots.length > 0 ? (
-                  <div className="flex flex-col gap-2 overflow-y-auto max-h-64">
-                    {slotsData.slots.map((s, idx) => (
-                      <Button
-                        key={idx}
-                        label={s.tipo === 'dia_inteiro' ? 'Qualquer horário (Dia Inteiro)' : `${s.hora_inicio} às ${s.hora_fim}`}
-                        outlined={slotSelecionado !== s}
-                        className={`w-full text-sm py-2 ${slotSelecionado === s ? 'theme-btn-primary text-white' : 'text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-                        onClick={() => setSlotSelecionado(s)}
+                  <div className="flex flex-col gap-4">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-100 dark:border-blue-800/50">
+                      <p className="text-xs font-bold text-blue-700 dark:text-blue-300 mb-2">Horários de Atendimento da Fábrica:</p>
+                      <ul className="text-sm text-blue-800 dark:text-blue-200 list-disc list-inside">
+                        {slotsData.slots.map((s, idx) => (
+                          <li key={idx}>
+                            {s.tipo === 'dia_inteiro' ? 'Qualquer horário (Dia Inteiro)' : `${s.hora_inicio} às ${s.hora_fim}`}
+                          </li>
+                        ))}
+                      </ul>
+                      {slotsData.coletas_restantes !== undefined && (
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-semibold">
+                          Vagas da fábrica neste dia: {slotsData.coletas_restantes}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div className="mt-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                        Que horas você chegará?
+                      </label>
+                      <Calendar 
+                        value={horaDesejada} 
+                        onChange={(e) => setHoraDesejada(e.value)} 
+                        timeOnly 
+                        hourFormat="24"
+                        placeholder="Ex: 14:30"
+                        className="w-full"
                       />
-                    ))}
-                    {slotsData.coletas_restantes && (
-                       <p className="text-xs text-center text-gray-500 mt-2">Vagas restantes da fábrica hoje: {slotsData.coletas_restantes}</p>
-                    )}
+                      <p className="text-xs text-gray-500 mt-1">O horário deve estar dentro das faixas de atendimento acima.</p>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex-1 flex flex-col items-center justify-center text-center">
@@ -340,7 +360,7 @@ export const MuralOfertas = () => {
                   label="Confirmar Reserva" 
                   icon="pi pi-check" 
                   loading={agendando}
-                  disabled={!slotSelecionado}
+                  disabled={!horaDesejada || !dataDesejada}
                   onClick={handleAgendarColeta} 
                   className="theme-btn-primary text-white text-sm px-6" 
                 />

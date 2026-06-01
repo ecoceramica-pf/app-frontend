@@ -98,26 +98,24 @@ export const Landing = () => {
       <main className="pt-20">
         {/* Hero Section */}
         <section className="relative min-h-[90vh] flex px-6 md:px-12 py-16 overflow-hidden bg-cover bg-center items-center justify-center" style={{ backgroundImage: 'url("/imagens/bg-hero.webp")' }}>
-          <div className="absolute inset-0 bg-black/40"></div>
-          <div className="relative z-10 max-w-5xl mx-auto w-full flex justify-center items-center pt-20">
-            <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-1000 max-w-3xl w-full bg-white/30 backdrop-blur-xl border border-white/50 p-10 md:p-16 rounded-[2rem] flex flex-col items-center text-center shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
-              <img alt="EcoCerâmica Logo" className="h-16 md:h-20 w-auto mb-6 brightness-0 drop-shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQiFVP6bXl-BRRtWPJumMStsM06Ld_vLcEMHkEaE-YDt6Dlqrylwov8vg1c7aOGEt7HpfAFEecKmZEOrxUc9CMzNKDVzKx_KcqFn9MkTnT6RtFFRH_mBiHXcCd7ifuloEdEOw-_vogyDsiJDBRr8-KVxL2zgIk6zplt8Njy2H3dsj2WN4N8ggmLktYQYlW9cWuoHp6VM6J1xECaCOEcYHXttMkKVZj0up1dsSB6hvO-fPb0ouU62ZHoVsE4hZ9YLzGRBkkDQm7Sg" />
+          <div className="absolute inset-0 bg-black/60"></div>
+          <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center text-center pt-20">
+            <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-1000 flex flex-col items-center">
+              <img alt="EcoCerâmica Logo" className="h-16 md:h-20 w-auto mb-8 drop-shadow-md brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQiFVP6bXl-BRRtWPJumMStsM06Ld_vLcEMHkEaE-YDt6Dlqrylwov8vg1c7aOGEt7HpfAFEecKmZEOrxUc9CMzNKDVzKx_KcqFn9MkTnT6RtFFRH_mBiHXcCd7ifuloEdEOw-_vogyDsiJDBRr8-KVxL2zgIk6zplt8Njy2H3dsj2WN4N8ggmLktYQYlW9cWuoHp6VM6J1xECaCOEcYHXttMkKVZj0up1dsSB6hvO-fPb0ouU62ZHoVsE4hZ9YLzGRBkkDQm7Sg" />
 
-              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-detail to-secondary drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)]">
-                  EcoCerâmica PF
-                </span>
+              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 drop-shadow-md">
+                EcoCerâmica PF
               </h1>
 
-              <p className="text-xl md:text-2xl text-gray-900 max-w-2xl font-bold tracking-wide mb-10 drop-shadow-sm">
+              <p className="text-xl md:text-2xl text-gray-200 max-w-3xl font-medium tracking-wide mb-12 drop-shadow-md">
                 Transformando resíduos em oportunidades. Conectando fábricas e artesãos em Porto Ferreira.
               </p>
 
-              <div className="pt-2 w-full flex flex-col sm:flex-row justify-center gap-4">
-                <Link to="/register" className="bg-gradient-to-r from-primary to-secondary text-white px-10 py-4 rounded-full font-bold text-lg hover:scale-105 transition-all shadow-lg hover:shadow-xl">
+              <div className="pt-2 w-full flex flex-col sm:flex-row justify-center gap-6">
+                <Link to="/register" className="bg-primary text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
                   Começar a Impactar
                 </Link>
-                <a href="#beneficios" onClick={(e) => scrollToSection(e, '#beneficios')} className="px-10 py-4 bg-white/40 border border-white text-primary rounded-full font-bold text-lg hover:bg-white/60 transition-all shadow-sm">
+                <a href="#beneficios" onClick={(e) => scrollToSection(e, '#beneficios')} className="px-10 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all shadow-sm hover:-translate-y-1">
                   Conhecer Mais
                 </a>
               </div>

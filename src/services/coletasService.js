@@ -19,6 +19,14 @@ export const coletasService = {
     const response = await api.post(`/coletas/${id}/cancelar`);
     return response.data;
   },
+  aprovarColeta: async (id) => {
+    const response = await api.post(`/coletas/${id}/aprovar`);
+    return response.data;
+  },
+  recusarColeta: async (id) => {
+    const response = await api.post(`/coletas/${id}/recusar`);
+    return response.data;
+  },
   confirmarFabrica: async (id) => {
     const response = await api.post(`/coletas/${id}/confirmar-fabrica`);
     return response.data;
