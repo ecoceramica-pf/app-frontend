@@ -12,6 +12,8 @@ import { MeusResiduos } from '../pages/MeusResiduos';
 import { MinhasColetas } from '../pages/MinhasColetas';
 import { ConfiguracaoDisponibilidade } from '../pages/ConfiguracaoDisponibilidade';
 import { GerenciarOferta } from '../pages/GerenciarOferta';
+import { ForgotPassword } from '../pages/ForgotPassword';
+import { ResetPassword } from '../pages/ResetPassword';
 import { AppLayout } from '../components/layout/AppLayout';
 
 const PrivateRoute = ({ children }) => {
@@ -35,6 +37,8 @@ export const AppRoutes = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         
         <Route 
           path="/dashboard" 

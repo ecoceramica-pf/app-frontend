@@ -32,5 +32,17 @@ export const authService = {
   logout: async () => {
     const response = await api.post('/logout');
     return response.data;
+  },
+
+  forgotPassword: async (email) => {
+    await authService.initCsrf();
+    const response = await api.post('/forgot-password', { email });
+    return response.data;
+  },
+
+  resetPassword: async (data) => {
+    await authService.initCsrf();
+    const response = await api.post('/reset-password', data);
+    return response.data;
   }
 };

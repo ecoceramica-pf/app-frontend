@@ -1,38 +1,40 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { Card } from 'primereact/card';
+import { authService } from '../services/authService';
 
-export const Login = () => {
+export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const toast = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Preencha todos os campos.' });
+    if (!email) {
+      toast.current.show({ severity: 'warn', summary: 'Aviso', detail: 'Preencha o campo de email.' });
       return;
     }
 
     try {
       setLoading(true);
-      await login(email, password);
-      navigate('/dashboard');
+      await authService.forgotPassword(email);
+      toast.current.show({ 
+        severity: 'success', 
+        summary: 'Sucesso', 
+        detail: 'Instruções de recuperação foram enviadas para seu email.'
+      });
+      setTimeout(() => navigate('/login'), 3000);
     } catch (error) {
       console.error(error);
       toast.current.show({ 
         severity: 'error', 
-        summary: 'Erro de Autenticação', 
-        detail: error.response?.status === 401 ? 'Email ou senha inválidos' : 'Falha ao conectar ao servidor'
+        summary: 'Erro', 
+        detail: error.response?.data?.message || 'Falha ao processar solicitação'
       });
     } finally {
       setLoading(false);
@@ -51,8 +53,8 @@ export const Login = () => {
         }}
       >
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-primary dark:text-primary/90 mb-2 tracking-tight">Ecocerâmica</h1>
-          <p className="text-gray-500 dark:text-gray-400 font-medium">Entre na plataforma de sustentabilidade</p>
+          <h1 className="text-4xl font-extrabold text-primary dark:text-primary/90 mb-2 tracking-tight">Recuperar Senha</h1>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">Informe seu email para receber o link de recuperação</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -68,30 +70,9 @@ export const Login = () => {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-              <label htmlFor="password" className="text-sm font-bold text-gray-700 dark:text-gray-300">Senha</label>
-              <Link to="/forgot-password" className="text-xs font-bold text-primary dark:text-primary/90 hover:text-primary/80 transition-colors hover:underline">
-                Esqueceu a senha?
-              </Link>
-            </div>
-            <Password 
-              id="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              feedback={false}
-              toggleMask
-              placeholder="••••••••"
-              pt={{
-                root: { className: 'w-full [&>div]:w-full' },
-                input: { className: 'w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all' }
-              }}
-            />
-          </div>
-
           <Button 
-            label="Entrar" 
-            icon="pi pi-sign-in" 
+            label="Enviar Email" 
+            icon="pi pi-envelope" 
             loading={loading} 
             className="w-full mt-2 !bg-primary hover:!bg-primary/90 !text-white py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all flex justify-center items-center gap-2 !border-none cursor-pointer"
             type="submit"
@@ -99,9 +80,9 @@ export const Login = () => {
         </form>
 
         <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
-          Ainda não tem uma conta?{' '}
-          <Link to="/register" className="font-bold text-primary dark:text-primary/90 hover:text-primary/80 transition-colors hover:underline">
-            Cadastre-se agora
+          Lembrou a senha?{' '}
+          <Link to="/login" className="font-bold text-primary dark:text-primary/90 hover:text-primary/80 transition-colors hover:underline">
+            Voltar para o login
           </Link>
         </div>
       </Card>
