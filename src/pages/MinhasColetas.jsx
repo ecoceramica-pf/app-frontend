@@ -4,31 +4,43 @@ import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
+import { Paginator } from 'primereact/paginator';
 import { coletasService } from '../services/coletasService';
 
 export const MinhasColetas = () => {
   const navigate = useNavigate();
   const [coletas, setColetas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [first, setFirst] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
   
   const toast = useRef(null);
   const [coletaSelecionada, setColetaSelecionada] = useState(null);
   const [loadingAction, setLoadingAction] = useState(false);
 
-  useEffect(() => {
-    fetchColetas();
-  }, []);
-
-  const fetchColetas = async () => {
+  const fetchColetas = async (page = 1) => {
+    setLoading(true);
     try {
-      const response = await coletasService.minhasColetas();
+      const response = await coletasService.minhasColetas({ page });
       const dados = response.data ? response.data : response;
       setColetas(Array.isArray(dados) ? dados : []);
+      if (response.meta) {
+        setTotalRecords(response.meta.total);
+      }
     } catch (error) {
       console.error('Erro ao buscar coletas:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchColetas(1);
+  }, []);
+
+  const onPageChange = (event) => {
+    setFirst(event.first);
+    fetchColetas(event.page + 1);
   };
 
   const getStatusClass = (status) => {
@@ -125,80 +137,92 @@ export const MinhasColetas = () => {
           <Button label="Ver Ofertas Disponíveis" outlined onClick={() => navigate('/mural')} />
         </div>
       ) : (
-        /* Grid de Coletas */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {coletas.map(coleta => {
-            const isCortante = coleta.oferta_residuo?.material?.cortante;
-            const isAltoVolume = (coleta.oferta_residuo?.quantidade_cacamba > 0) || (coleta.oferta_residuo?.quantidade_kg > 500);
-            
-            let qtdeStr = [];
-            if (coleta.oferta_residuo?.quantidade_kg) qtdeStr.push(`${coleta.oferta_residuo.quantidade_kg} kg`);
-            if (coleta.oferta_residuo?.quantidade_cacamba) qtdeStr.push(`${coleta.oferta_residuo.quantidade_cacamba} caçamba(s)`);
-            const quantidadeFinal = qtdeStr.join(' + ') || 'Não especificada';
+        <div className="flex flex-col gap-6">
+          {/* Grid de Coletas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {coletas.map(coleta => {
+              const isCortante = coleta.oferta_residuo?.material?.cortante;
+              const isAltoVolume = (coleta.oferta_residuo?.quantidade_cacamba > 0) || (coleta.oferta_residuo?.quantidade_kg > 500);
+              
+              let qtdeStr = [];
+              if (coleta.oferta_residuo?.quantidade_kg) qtdeStr.push(`${coleta.oferta_residuo.quantidade_kg} kg`);
+              if (coleta.oferta_residuo?.quantidade_cacamba) qtdeStr.push(`${coleta.oferta_residuo.quantidade_cacamba} caçamba(s)`);
+              const quantidadeFinal = qtdeStr.join(' + ') || 'Não especificada';
 
-            return (
-              <div key={coleta.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full border-l-4 border-l-secondary">
-                
-                {/* Card Header */}
-                <div className="p-5 pb-3 flex justify-between items-start gap-2">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-secondary uppercase tracking-wider">{coleta.oferta_residuo?.material?.nome || 'Material Desconhecido'}</span>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
-                      {quantidadeFinal}
-                    </h3>
-                  </div>
-                  <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-md ${getStatusClass(coleta.status)}`}>
-                    {coleta.status}
-                  </span>
-                </div>
-
-                {/* Card Body */}
-                <div className="p-5 pt-0 flex-1 flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mt-2">
-                    <i className="pi pi-building text-sm"></i>
-                    <span className="text-sm truncate font-medium">De: {coleta.oferta_residuo?.usuario?.razao_social || coleta.oferta_residuo?.usuario?.name || 'Fábrica Parceira'}</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-gray-600 dark:text-gray-400">
-                    <i className="pi pi-map-marker mt-0.5 text-sm"></i>
-                    <p className="text-sm line-clamp-2">
-                      {coleta.oferta_residuo?.endereco 
-                        ? [coleta.oferta_residuo.endereco.bairro, coleta.oferta_residuo.endereco.cidade].filter(Boolean).join(', ') || 'Endereço incompleto'
-                        : 'Endereço não informado'}
-                    </p>
-                  </div>
+              return (
+                <div key={coleta.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full border-l-4 border-l-secondary">
                   
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-2 mt-auto pt-2">
-                    {Boolean(isCortante) && (
-                      <span className="text-[10px] font-bold bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-2 py-1 rounded">
-                        <i className="pi pi-exclamation-triangle mr-1 text-[10px]"></i> Cortante
-                      </span>
-                    )}
-                    {Boolean(isAltoVolume) && (
-                      <span className="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
-                        <i className="pi pi-chart-line mr-1 text-[10px]"></i> Alto Volume
-                      </span>
-                    )}
+                  {/* Card Header */}
+                  <div className="p-5 pb-3 flex justify-between items-start gap-2">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold text-secondary uppercase tracking-wider">{coleta.oferta_residuo?.material?.nome || 'Material Desconhecido'}</span>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
+                        {quantidadeFinal}
+                      </h3>
+                    </div>
+                    <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-md ${getStatusClass(coleta.status)}`}>
+                      {coleta.status}
+                    </span>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="p-5 pt-0 flex-1 flex flex-col gap-4">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mt-2">
+                      <i className="pi pi-building text-sm"></i>
+                      <span className="text-sm truncate font-medium">De: {coleta.oferta_residuo?.usuario?.razao_social || coleta.oferta_residuo?.usuario?.name || 'Fábrica Parceira'}</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-gray-600 dark:text-gray-400">
+                      <i className="pi pi-map-marker mt-0.5 text-sm"></i>
+                      <p className="text-sm line-clamp-2">
+                        {coleta.oferta_residuo?.endereco 
+                          ? [coleta.oferta_residuo.endereco.bairro, coleta.oferta_residuo.endereco.cidade].filter(Boolean).join(', ') || 'Endereço incompleto'
+                          : 'Endereço não informado'}
+                      </p>
+                    </div>
+                    
+                    {/* Badges */}
+                    <div className="flex flex-wrap gap-2 mt-auto pt-2">
+                      {Boolean(isCortante) && (
+                        <span className="text-[10px] font-bold bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-2 py-1 rounded">
+                          <i className="pi pi-exclamation-triangle mr-1 text-[10px]"></i> Cortante
+                        </span>
+                      )}
+                      {Boolean(isAltoVolume) && (
+                        <span className="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
+                          <i className="pi pi-chart-line mr-1 text-[10px]"></i> Alto Volume
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto flex justify-between items-center">
+                    <span className="text-xs font-medium text-gray-500">
+                      Reservado em {formatarData(coleta.data_reserva)}
+                    </span>
+                    <Button 
+                      label="Gerenciar" 
+                      icon="pi pi-cog" 
+                      iconPos="right"
+                      outlined
+                      className="text-sm font-bold border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 py-1"
+                      onClick={() => abrirModal(coleta)}
+                    />
                   </div>
                 </div>
-
-                {/* Card Footer */}
-                <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto flex justify-between items-center">
-                  <span className="text-xs font-medium text-gray-500">
-                    Reservado em {formatarData(coleta.data_reserva)}
-                  </span>
-                  <Button 
-                    label="Gerenciar" 
-                    icon="pi pi-cog" 
-                    iconPos="right"
-                    outlined
-                    className="text-sm font-bold border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 py-1"
-                    onClick={() => abrirModal(coleta)}
-                  />
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mt-4">
+            <Paginator 
+              first={first} 
+              rows={9} 
+              totalRecords={totalRecords} 
+              onPageChange={onPageChange} 
+              className="bg-transparent border-none py-3"
+            />
+          </div>
         </div>
       )}
       {/* Modal de Gerenciamento */}
@@ -256,6 +280,18 @@ export const MinhasColetas = () => {
                 )}
               </div>
             </div>
+
+            {coletaSelecionada.observacoes && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800/50 mt-4">
+                <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+                  <i className="pi pi-info-circle"></i>
+                  Observações enviadas por você
+                </p>
+                <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                  "{coletaSelecionada.observacoes}"
+                </p>
+              </div>
+            )}
 
             {/* Status das Confirmações */}
             {coletaSelecionada.status === 'pendente' ? (

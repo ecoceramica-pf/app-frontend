@@ -4,7 +4,9 @@ import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
+import { Paginator } from 'primereact/paginator';
 import { Calendar } from 'primereact/calendar';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { ofertasService } from '../services/ofertasService';
 import { coletasService } from '../services/coletasService';
 import { disponibilidadeService } from '../services/disponibilidadeService';
@@ -14,6 +16,8 @@ export const MuralOfertas = () => {
   const [ofertas, setOfertas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ofertaSelecionada, setOfertaSelecionada] = useState(null);
+  const [first, setFirst] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
   
   // States para o Agendamento
   const [agendamentoStep, setAgendamentoStep] = useState(0); // 0 = Detalhes, 1 = Selecionar Data/Slot
@@ -22,25 +26,35 @@ export const MuralOfertas = () => {
   const [buscandoSlots, setBuscandoSlots] = useState(false);
   const [slotsData, setSlotsData] = useState(null);
   const [mensagemSlot, setMensagemSlot] = useState('');
+  const [observacoes, setObservacoes] = useState('');
   const [agendando, setAgendando] = useState(false);
 
   const toast = useRef(null);
 
-  useEffect(() => {
-    const fetchOfertas = async () => {
-      try {
-        const response = await ofertasService.listarOfertas();
-        const dados = response.data ? response.data : response;
-        setOfertas(Array.isArray(dados) ? dados : []);
-      } catch (error) {
-        console.error('Erro ao buscar ofertas:', error);
-      } finally {
-        setLoading(false);
+  const fetchOfertas = async (page = 1) => {
+    setLoading(true);
+    try {
+      const response = await ofertasService.listarOfertas({ page });
+      const dados = response.data ? response.data : response;
+      setOfertas(Array.isArray(dados) ? dados : []);
+      if (response.meta) {
+        setTotalRecords(response.meta.total);
       }
-    };
+    } catch (error) {
+      console.error('Erro ao buscar ofertas:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchOfertas();
+  useEffect(() => {
+    fetchOfertas(1);
   }, []);
+
+  const onPageChange = (event) => {
+    setFirst(event.first);
+    fetchOfertas(event.page + 1);
+  };
 
   const minDate = new Date();
   minDate.setHours(0, 0, 0, 0);
@@ -59,6 +73,7 @@ export const MuralOfertas = () => {
     setHoraDesejada(null);
     setSlotsData(null);
     setMensagemSlot('');
+    setObservacoes('');
   };
 
   const fecharModal = () => {
@@ -97,10 +112,11 @@ export const MuralOfertas = () => {
     try {
       // Formar o YYYY-MM-DDTHH:mm:00
       const dataStr = new Date(dataDesejada.getTime() - (dataDesejada.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-      const horaStr = horaDesejada.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false });
-      const dataHoraFim = `${dataStr}T${horaStr}:00`;
+      const h = horaDesejada.getHours().toString().padStart(2, '0');
+      const m = horaDesejada.getMinutes().toString().padStart(2, '0');
+      const dataHoraFim = `${dataStr}T${h}:${m}:00`;
 
-      await coletasService.reservarColeta(ofertaSelecionada.id, dataHoraFim);
+      await coletasService.reservarColeta(ofertaSelecionada.id, dataHoraFim, observacoes);
       toast.current?.show({ severity: 'success', summary: 'Sucesso', detail: 'Sua proposta de coleta foi enviada e está aguardando aprovação da fábrica!', life: 4000 });
       setOfertas(ofertas.filter(o => o.id !== ofertaSelecionada.id));
       fecharModal();
@@ -142,68 +158,80 @@ export const MuralOfertas = () => {
           <p className="text-gray-500">Não há resíduos listados na plataforma atualmente. Volte mais tarde ou seja o primeiro a publicar uma nova oferta.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ofertas.map(oferta => {
-            const isCortante = oferta.material?.cortante;
-            const isAltoVolume = (oferta.quantidade_cacamba > 0) || (oferta.quantidade_kg > 500);
-            
-            let qtdeStr = [];
-            if (oferta.quantidade_kg) qtdeStr.push(`${oferta.quantidade_kg} kg`);
-            if (oferta.quantidade_cacamba) qtdeStr.push(`${oferta.quantidade_cacamba} caçamba(s)`);
-            const quantidadeFinal = qtdeStr.join(' + ') || 'Não especificada';
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {ofertas.map(oferta => {
+              const isCortante = oferta.material?.cortante;
+              const isAltoVolume = (oferta.quantidade_cacamba > 0) || (oferta.quantidade_kg > 500);
+              
+              let qtdeStr = [];
+              if (oferta.quantidade_kg) qtdeStr.push(`${oferta.quantidade_kg} kg`);
+              if (oferta.quantidade_cacamba) qtdeStr.push(`${oferta.quantidade_cacamba} caçamba(s)`);
+              const quantidadeFinal = qtdeStr.join(' + ') || 'Não especificada';
 
-            return (
-              <div key={oferta.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full border-l-4 border-l-primary">
-                <div className="p-5 pb-3 flex justify-between items-start gap-2">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">{oferta.material?.nome || 'Material Desconhecido'}</span>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
-                      {quantidadeFinal}
-                    </h3>
+              return (
+                <div key={oferta.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full border-l-4 border-l-primary">
+                  <div className="p-5 pb-3 flex justify-between items-start gap-2">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-semibold text-primary uppercase tracking-wider">{oferta.material?.nome || 'Material Desconhecido'}</span>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
+                        {quantidadeFinal}
+                      </h3>
+                    </div>
+                    <span className="text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">
+                      {formatarData(oferta.data_publicacao)}
+                    </span>
                   </div>
-                  <span className="text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">
-                    {formatarData(oferta.data_publicacao)}
-                  </span>
+                  <div className="p-5 pt-0 flex-1 flex flex-col gap-4">
+                    <div className="flex items-start gap-2 text-gray-600 dark:text-gray-400 mt-2">
+                      <i className="pi pi-map-marker mt-0.5 text-sm"></i>
+                      <p className="text-sm line-clamp-2">
+                        {oferta.endereco 
+                          ? [oferta.endereco.bairro, oferta.endereco.cidade].filter(Boolean).join(', ') || 'Endereço incompleto'
+                          : 'Endereço não informado'}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                      <i className="pi pi-building text-sm"></i>
+                      <span className="text-sm truncate font-medium">Por: {oferta.usuario?.name || 'Fábrica parceira'}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-auto pt-2">
+                      {Boolean(isCortante) && (
+                        <span className="text-[10px] font-bold bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-2 py-1 rounded">
+                          <i className="pi pi-exclamation-triangle mr-1 text-[10px]"></i> Cortante
+                        </span>
+                      )}
+                      {Boolean(isAltoVolume) && (
+                        <span className="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
+                          <i className="pi pi-chart-line mr-1 text-[10px]"></i> Alto Volume
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto">
+                    <Button 
+                      label="Ver Detalhes" 
+                      icon="pi pi-arrow-right" 
+                      iconPos="right"
+                      outlined
+                      className="w-full text-sm font-bold border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                      onClick={() => abrirModal(oferta)}
+                    />
+                  </div>
                 </div>
-                <div className="p-5 pt-0 flex-1 flex flex-col gap-4">
-                  <div className="flex items-start gap-2 text-gray-600 dark:text-gray-400 mt-2">
-                    <i className="pi pi-map-marker mt-0.5 text-sm"></i>
-                    <p className="text-sm line-clamp-2">
-                      {oferta.endereco 
-                        ? [oferta.endereco.bairro, oferta.endereco.cidade].filter(Boolean).join(', ') || 'Endereço incompleto'
-                        : 'Endereço não informado'}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                    <i className="pi pi-building text-sm"></i>
-                    <span className="text-sm truncate font-medium">Por: {oferta.usuario?.name || 'Fábrica parceira'}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-auto pt-2">
-                    {Boolean(isCortante) && (
-                      <span className="text-[10px] font-bold bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-2 py-1 rounded">
-                        <i className="pi pi-exclamation-triangle mr-1 text-[10px]"></i> Cortante
-                      </span>
-                    )}
-                    {Boolean(isAltoVolume) && (
-                      <span className="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
-                        <i className="pi pi-chart-line mr-1 text-[10px]"></i> Alto Volume
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto">
-                  <Button 
-                    label="Ver Detalhes" 
-                    icon="pi pi-arrow-right" 
-                    iconPos="right"
-                    outlined
-                    className="w-full text-sm font-bold border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                    onClick={() => abrirModal(oferta)}
-                  />
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden mt-4">
+            <Paginator 
+              first={first} 
+              rows={9} 
+              totalRecords={totalRecords} 
+              onPageChange={onPageChange} 
+              className="bg-transparent border-none py-3"
+            />
+          </div>
         </div>
       )}
 
@@ -339,6 +367,20 @@ export const MuralOfertas = () => {
                         className="w-full"
                       />
                       <p className="text-xs text-gray-500 mt-1">O horário deve estar dentro das faixas de atendimento acima.</p>
+                    </div>
+
+                    <div className="mt-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                        Observações (Opcional)
+                      </label>
+                      <InputTextarea 
+                        value={observacoes} 
+                        onChange={(e) => setObservacoes(e.target.value)} 
+                        rows={2} 
+                        placeholder="Ex: Chegarei com caminhão de grande porte" 
+                        className="w-full"
+                        maxLength={1000}
+                      />
                     </div>
                   </div>
                 ) : (
