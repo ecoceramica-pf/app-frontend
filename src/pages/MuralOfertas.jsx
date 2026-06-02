@@ -10,6 +10,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { ofertasService } from '../services/ofertasService';
 import { coletasService } from '../services/coletasService';
 import { disponibilidadeService } from '../services/disponibilidadeService';
+import { MapaOfertas } from '../components/common/MapaOfertas';
 
 export const MuralOfertas = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export const MuralOfertas = () => {
   const [ofertaSelecionada, setOfertaSelecionada] = useState(null);
   const [first, setFirst] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [viewMode, setViewMode] = useState('lista'); // 'lista' ou 'mapa'
   
   // States para o Agendamento
   const [agendamentoStep, setAgendamentoStep] = useState(0); // 0 = Detalhes, 1 = Selecionar Data/Slot
@@ -144,6 +146,30 @@ export const MuralOfertas = () => {
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Resíduos Disponíveis</h2>
           <p className="text-gray-600 dark:text-gray-400 mt-1">Veja os materiais disponíveis para coleta na sua região.</p>
         </div>
+        <div className="flex items-center bg-gray-100/80 dark:bg-gray-800/80 p-1.5 rounded-full border border-gray-200/50 dark:border-gray-700/50 shadow-inner">
+          <button
+            onClick={() => setViewMode('lista')}
+            className={`flex items-center justify-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
+              viewMode === 'lista'
+                ? 'bg-white dark:bg-gray-700 text-primary shadow ring-1 ring-black/5 dark:ring-white/10 scale-100'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 scale-95'
+            }`}
+          >
+            <i className="pi pi-list"></i>
+            Lista
+          </button>
+          <button
+            onClick={() => setViewMode('mapa')}
+            className={`flex items-center justify-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
+              viewMode === 'mapa'
+                ? 'bg-white dark:bg-gray-700 text-primary shadow ring-1 ring-black/5 dark:ring-white/10 scale-100'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 scale-95'
+            }`}
+          >
+            <i className="pi pi-map-marker"></i>
+            Mapa
+          </button>
+        </div>
       </div>
 
       {/* Loading State */}
@@ -159,8 +185,12 @@ export const MuralOfertas = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ofertas.map(oferta => {
+          {viewMode === 'mapa' ? (
+            <MapaOfertas ofertas={ofertas} onAgendarClick={abrirModal} />
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {ofertas.map(oferta => {
               const isCortante = oferta.material?.cortante;
               const isAltoVolume = (oferta.quantidade_cacamba > 0) || (oferta.quantidade_kg > 500);
               
@@ -232,6 +262,8 @@ export const MuralOfertas = () => {
               className="bg-transparent border-none py-3"
             />
           </div>
+            </>
+          )}
         </div>
       )}
 
