@@ -5,8 +5,8 @@ export const ofertasService = {
     const response = await api.get('/ofertas', { params });
     return response.data;
   },
-  minhasOfertas: async () => {
-    const response = await api.get('/minhas-ofertas');
+  minhasOfertas: async (params) => {
+    const response = await api.get('/minhas-ofertas', { params });
     return response.data;
   },
   criarOferta: async (data) => {
@@ -23,6 +23,10 @@ export const ofertasService = {
   },
   excluirOferta: async (id) => {
     const response = await api.delete(`/ofertas/${id}`);
+    return response.data;
+  },
+  alterarStatus: async (id, status) => {
+    const response = await api.patch(`/ofertas/${id}/status`, { status });
     return response.data;
   },
   uploadImagens: async (uuid, formData) => {

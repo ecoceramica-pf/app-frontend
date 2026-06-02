@@ -47,7 +47,7 @@ export const Landing = () => {
       <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
         <div className="flex justify-between items-center px-6 md:px-12 py-4">
           <div className="flex items-center gap-2">
-            <img alt="EcoCerâmica PF" className="h-10 w-auto cursor-pointer" onClick={(e) => scrollToSection(e, '#')} src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQiFVP6bXl-BRRtWPJumMStsM06Ld_vLcEMHkEaE-YDt6Dlqrylwov8vg1c7aOGEt7HpfAFEecKmZEOrxUc9CMzNKDVzKx_KcqFn9MkTnT6RtFFRH_mBiHXcCd7ifuloEdEOw-_vogyDsiJDBRr8-KVxL2zgIk6zplt8Njy2H3dsj2WN4N8ggmLktYQYlW9cWuoHp6VM6J1xECaCOEcYHXttMkKVZj0up1dsSB6hvO-fPb0ouU62ZHoVsE4hZ9YLzGRBkkDQm7Sg" />
+            <img alt="EcoCerâmica PF" className="h-10 w-auto cursor-pointer" onClick={(e) => scrollToSection(e, '#')} src="/logo-color.svg" />
           </div>
 
           {/* Desktop Menu */}
@@ -99,9 +99,9 @@ export const Landing = () => {
         {/* Hero Section */}
         <section className="relative min-h-[90vh] flex px-6 md:px-12 py-16 overflow-hidden bg-cover bg-center items-center justify-center" style={{ backgroundImage: 'url("/imagens/bg-hero.webp")' }}>
           <div className="absolute inset-0 bg-black/60"></div>
-          <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center text-center pt-20">
+          <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center text-center">
             <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-1000 flex flex-col items-center">
-              <img alt="EcoCerâmica Logo" className="h-16 md:h-20 w-auto mb-8 drop-shadow-md brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQiFVP6bXl-BRRtWPJumMStsM06Ld_vLcEMHkEaE-YDt6Dlqrylwov8vg1c7aOGEt7HpfAFEecKmZEOrxUc9CMzNKDVzKx_KcqFn9MkTnT6RtFFRH_mBiHXcCd7ifuloEdEOw-_vogyDsiJDBRr8-KVxL2zgIk6zplt8Njy2H3dsj2WN4N8ggmLktYQYlW9cWuoHp6VM6J1xECaCOEcYHXttMkKVZj0up1dsSB6hvO-fPb0ouU62ZHoVsE4hZ9YLzGRBkkDQm7Sg" />
+              <img alt="EcoCerâmica Logo" className="h-16 md:h-34 w-auto mb-8 drop-shadow-md" src="/logo-white.svg" />
 
               <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 drop-shadow-md">
                 EcoCerâmica PF

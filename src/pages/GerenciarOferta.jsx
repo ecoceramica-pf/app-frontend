@@ -31,14 +31,14 @@ export const GerenciarOferta = () => {
     }
   };
 
-  const handleExcluirOferta = async () => {
+  const handleAlterarStatus = async (novoStatus) => {
     setLoadingAction(true);
     try {
-      await ofertasService.excluirOferta(id);
-      toast.current?.show({ severity: 'success', summary: 'Sucesso', detail: 'Oferta excluída.' });
-      setTimeout(() => navigate('/meus-residuos'), 1500);
+      await ofertasService.alterarStatus(id, novoStatus);
+      toast.current?.show({ severity: 'success', summary: 'Sucesso', detail: `Status alterado para ${novoStatus}.` });
+      fetchOferta();
     } catch (error) {
-      toast.current?.show({ severity: 'error', summary: 'Erro', detail: error.response?.data?.message || 'Falha ao excluir.' });
+      toast.current?.show({ severity: 'error', summary: 'Erro', detail: error.response?.data?.message || 'Falha ao alterar status.' });
     } finally {
       setLoadingAction(false);
     }
@@ -115,25 +115,57 @@ export const GerenciarOferta = () => {
     <div className="max-w-4xl mx-auto flex flex-col gap-6">
       <Toast ref={toast} />
       
-      {/* Header com Glassmorphism */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-blue-600 p-8 text-white shadow-lg">
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      {/* Header Elegante e Moderno */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 md:p-8 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex items-start gap-4">
+          <Button icon="pi pi-arrow-left" rounded text aria-label="Voltar" className="text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 mt-1 flex-shrink-0" onClick={() => navigate('/meus-residuos')} />
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <Button icon="pi pi-arrow-left" rounded text className="text-white hover:bg-white/20" onClick={() => navigate('/meus-residuos')} aria-label="Voltar" />
-              <h2 className="text-3xl font-bold">Gerenciar Resíduo</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">
+              Gerenciar Resíduo
+            </h2>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-primary/10 text-primary text-sm font-semibold">
+                <i className="pi pi-tag text-xs"></i>
+                {oferta.material?.nome}
+              </span>
+              <span className="text-gray-400 dark:text-gray-600 hidden sm:inline">•</span>
+              <span className="text-gray-600 dark:text-gray-400 text-sm font-medium flex items-center gap-1.5">
+                <i className="pi pi-box text-xs opacity-70"></i>
+                {[
+                  oferta.quantidade_kg ? `${oferta.quantidade_kg} kg` : null,
+                  oferta.quantidade_cacamba ? `${oferta.quantidade_cacamba} caçamba(s)` : null
+                ].filter(Boolean).join(' + ')}
+              </span>
             </div>
-            <h3 className="text-xl opacity-90">{oferta.material?.nome}</h3>
-            <p className="font-medium mt-1">
-              {[
-                oferta.quantidade_kg ? `${oferta.quantidade_kg} kg` : null,
-                oferta.quantidade_cacamba ? `${oferta.quantidade_cacamba} caçamba(s)` : null
-              ].filter(Boolean).join(' + ')}
-            </p>
           </div>
-          <div className="bg-white/20 px-4 py-2 rounded-lg font-bold text-sm tracking-wider uppercase backdrop-blur-md border border-white/30">
-            Status: {oferta.status}
+        </div>
+        
+        <div className="flex flex-col w-full md:w-auto items-stretch md:items-end gap-4">
+          <div className="flex items-center justify-between md:justify-end gap-3 bg-gray-50 dark:bg-gray-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-gray-800 w-full">
+            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status Atual</span>
+            <div className="flex items-center gap-2">
+              {oferta.status === 'disponivel' && <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>}
+              <span className={`text-sm font-bold uppercase tracking-wider
+                ${oferta.status === 'disponivel' ? 'text-green-600 dark:text-green-400' : 
+                  oferta.status === 'concluido' ? 'text-blue-600 dark:text-blue-400' :
+                  oferta.status === 'cancelado' ? 'text-red-600 dark:text-red-400' :
+                  'text-gray-600 dark:text-gray-300'
+                }`}>
+                {oferta.status}
+              </span>
+            </div>
+          </div>
+          
+          <div className="flex gap-2 w-full md:w-auto justify-end">
+            {oferta.status !== 'concluido' && oferta.status !== 'cancelado' && (
+              <>
+                <Button icon="pi pi-times" size="small" severity="danger" text label="Cancelar" onClick={() => handleAlterarStatus('cancelado')} loading={loadingAction} className="px-4" />
+                <Button icon="pi pi-check" size="small" severity="success" label="Concluir" onClick={() => handleAlterarStatus('concluido')} loading={loadingAction} className="px-6 font-bold shadow-sm" />
+              </>
+            )}
+            {(oferta.status === 'concluido' || oferta.status === 'cancelado') && (
+              <Button icon="pi pi-refresh" size="small" severity="info" outlined label="Tornar Disponível" onClick={() => handleAlterarStatus('disponivel')} loading={loadingAction} />
+            )}
           </div>
         </div>
       </div>
@@ -142,26 +174,16 @@ export const GerenciarOferta = () => {
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm">
         
         {!oferta.coleta || oferta.coleta.status === 'recusado' || oferta.coleta.status === 'cancelado' ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="flex flex-col items-center justify-center py-12 text-center w-full">
             <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-4">
               <i className="pi pi-inbox text-3xl text-blue-500"></i>
             </div>
             <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">Aguardando Propostas</h3>
-            <p className="text-gray-500 dark:text-gray-400 max-w-md">
+            <p className="text-gray-500 dark:text-gray-400 w-full md:w-2/3 lg:w-1/2 mx-auto px-4 mt-2">
               Sua oferta está visível no mural. Quando um coletor parceiro tiver interesse e sugerir um horário, a proposta aparecerá aqui para sua aprovação.
             </p>
             
-            {oferta.status === 'Disponível' && (
-              <Button 
-                label="Excluir Oferta" 
-                icon="pi pi-trash" 
-                severity="danger" 
-                outlined
-                className="mt-6"
-                loading={loadingAction}
-                onClick={handleExcluirOferta}
-              />
-            )}
+            
           </div>
         ) : (
           <div className="flex flex-col gap-8">
@@ -185,6 +207,18 @@ export const GerenciarOferta = () => {
                         {formatarDataHora(oferta.coleta.data_agendamento)}
                       </p>
                     </div>
+
+                    {oferta.coleta.observacoes && (
+                      <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800/50 mb-5">
+                        <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+                          <i className="pi pi-info-circle"></i>
+                          Observações do Coletor
+                        </p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                          "{oferta.coleta.observacoes}"
+                        </p>
+                      </div>
+                    )}
 
                     <div className="flex flex-wrap gap-3">
                       <Button 
@@ -228,6 +262,18 @@ export const GerenciarOferta = () => {
                     </p>
                   </div>
                 </div>
+
+                {oferta.coleta.observacoes && (
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800/50">
+                    <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+                      <i className="pi pi-info-circle"></i>
+                      Observações do Coletor
+                    </p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                      "{oferta.coleta.observacoes}"
+                    </p>
+                  </div>
+                )}
 
                 {/* Timeline / Status */}
                 <div className="mt-4 p-6 border border-gray-200 dark:border-gray-700 rounded-xl">
