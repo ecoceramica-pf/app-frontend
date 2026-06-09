@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { LandingNavbar } from '../components/landing/LandingNavbar';
 import { LandingFooter } from '../components/landing/LandingFooter';
+import { AccessibilityMenu } from '../components/AccessibilityMenu';
 
 export const Landing = () => {
   const observerRef = useRef(null);
@@ -181,6 +182,7 @@ export const Landing = () => {
       </main>
 
       <LandingFooter />
+      <AccessibilityMenu />
     </div>
   );
 };
