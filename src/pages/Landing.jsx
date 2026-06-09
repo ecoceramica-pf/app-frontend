@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { LandingNavbar } from '../components/landing/LandingNavbar';
+import { LandingFooter } from '../components/landing/LandingFooter';
 
 export const Landing = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const observerRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +31,6 @@ export const Landing = () => {
 
   const scrollToSection = (e, id) => {
     e.preventDefault();
-    setIsMenuOpen(false);
     if (id === '#') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -43,57 +43,7 @@ export const Landing = () => {
 
   return (
     <div className="bg-gray-50 text-gray-900 font-sans selection:bg-primary/20 overflow-x-hidden">
-      {/* TopNavBar */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
-        <div className="flex justify-between items-center px-6 md:px-12 py-4">
-          <div className="flex items-center gap-2">
-            <img alt="EcoCerâmica PF" className="h-10 w-auto cursor-pointer" onClick={(e) => scrollToSection(e, '#')} src="/logo-color.svg" />
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
-            <a className="text-primary font-bold border-b-2 border-primary pb-1 text-base cursor-pointer" onClick={(e) => scrollToSection(e, '#')}>Início</a>
-            <a className="text-gray-600 hover:text-primary transition-colors text-base cursor-pointer" onClick={(e) => scrollToSection(e, '#beneficios')}>Benefícios</a>
-            <a className="text-gray-600 hover:text-primary transition-colors text-base cursor-pointer" onClick={(e) => scrollToSection(e, '#como-funciona')}>Como Funciona</a>
-            <a className="text-gray-600 hover:text-primary transition-colors text-base cursor-pointer" onClick={(e) => scrollToSection(e, '#contato')}>Contato</a>
-          </div>
-
-          <div className="hidden md:flex gap-4">
-            <Link to="/login" className="bg-white text-primary border-2 border-primary px-6 py-2 rounded-lg font-bold hover:bg-primary/5 transition-colors">
-              Entrar
-            </Link>
-            <Link to="/register" className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-sm">
-              Cadastrar
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-gray-600 hover:text-primary focus:outline-none"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <i className={`pi ${isMenuOpen ? 'pi-times' : 'pi-bars'} text-2xl`}></i>
-          </button>
-        </div>
-
-        {/* Mobile Menu Panel */}
-        {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-lg py-4 px-6 flex flex-col gap-4 animate-fade-in">
-            <a className="text-primary font-bold text-lg cursor-pointer" onClick={(e) => scrollToSection(e, '#')}>Início</a>
-            <a className="text-gray-600 font-medium text-lg cursor-pointer" onClick={(e) => scrollToSection(e, '#beneficios')}>Benefícios</a>
-            <a className="text-gray-600 font-medium text-lg cursor-pointer" onClick={(e) => scrollToSection(e, '#como-funciona')}>Como Funciona</a>
-            <a className="text-gray-600 font-medium text-lg cursor-pointer" onClick={(e) => scrollToSection(e, '#contato')}>Contato</a>
-            <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-gray-100">
-              <Link to="/login" className="w-full text-center bg-white text-primary border-2 border-primary px-6 py-3 rounded-lg font-bold hover:bg-primary/5 transition-colors">
-                Entrar
-              </Link>
-              <Link to="/register" className="w-full text-center bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-sm">
-                Cadastrar
-              </Link>
-            </div>
-          </div>
-        )}
-      </nav>
+      <LandingNavbar scrollToSection={scrollToSection} />
 
       <main className="pt-20">
         {/* Hero Section */}
@@ -230,30 +180,7 @@ export const Landing = () => {
         </section>
       </main>
 
-      {/* Footer */}
-      <section id="contato" className="relative py-20 px-6 overflow-hidden bg-primary text-white">
-        <div className="absolute inset-0 z-0 opacity-10">
-          <img alt="Background Pattern" className="w-full h-full object-cover" src="/imagens/bg-ceramica.webp" />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto text-center animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-          <h2 className="text-3xl font-bold mb-10">Contato</h2>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-10">
-            <div className="flex items-center gap-3">
-              <i className="pi pi-envelope text-3xl text-blue-300"></i>
-              <span className="text-lg">contato@ecoceramicapf.com.br</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="w-full py-8 px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4 bg-white text-gray-600 border-t border-gray-200">
-        <div className="text-sm text-center md:text-left font-medium">
-          © 2026 EcoCerâmica PF. Fundada por alunos da FATEC de DSM de Porto Ferreira.
-        </div>
-        <div className="flex items-center">
-          <a className="hover:text-primary hover:underline transition-all text-sm font-medium" href="#">Privacidade</a>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };

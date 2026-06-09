@@ -1,31 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { Checkbox } from 'primereact/checkbox';
-import { Dropdown } from 'primereact/dropdown';
-import { InputNumber } from 'primereact/inputnumber';
-import { InputText } from 'primereact/inputtext';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Calendar } from 'primereact/calendar';
 import { disponibilidadeService } from '../services/disponibilidadeService';
-
-const DIAS_SEMANA = [
-  { label: 'Domingo', value: 0 },
-  { label: 'Segunda-feira', value: 1 },
-  { label: 'Terça-feira', value: 2 },
-  { label: 'Quarta-feira', value: 3 },
-  { label: 'Quinta-feira', value: 4 },
-  { label: 'Sexta-feira', value: 5 },
-  { label: 'Sábado', value: 6 }
-];
-
-const DURACAO_OPCOES = [
-  { label: '30 Minutos', value: 30 },
-  { label: '1 Hora', value: 60 },
-  { label: '2 Horas', value: 120 },
-  { label: 'Dia Inteiro', value: null }
-];
+import { ConfigGeralForm } from '../components/configuracao/ConfigGeralForm';
+import { FaixasHorarioTable } from '../components/configuracao/FaixasHorarioTable';
+import { BloqueiosTable } from '../components/configuracao/BloqueiosTable';
 
 export const ConfiguracaoDisponibilidade = () => {
   const toast = useRef(null);
@@ -176,13 +154,17 @@ export const ConfiguracaoDisponibilidade = () => {
 
   const actionTemplateFaixa = (rowData) => {
     return (
-      <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => removerFaixaItem(rowData.id)} />
+      <button className="p-button p-component p-button-icon-only p-button-danger p-button-rounded p-button-outlined" onClick={() => removerFaixaItem(rowData.id)}>
+        <span className="p-button-icon p-c pi pi-trash"></span>
+      </button>
     );
   };
 
   const actionTemplateBloqueio = (rowData) => {
     return (
-      <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => removerBloqueioItem(rowData.id)} />
+      <button className="p-button p-component p-button-icon-only p-button-danger p-button-rounded p-button-outlined" onClick={() => removerBloqueioItem(rowData.id)}>
+        <span className="p-button-icon p-c pi pi-trash"></span>
+      </button>
     );
   };
 
@@ -205,72 +187,18 @@ export const ConfiguracaoDisponibilidade = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Bloco Geral */}
-        <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col h-full">
-          <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white"><i className="pi pi-cog mr-2"></i>Configurações Gerais</h3>
-          
-          <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Dias de Operação da Fábrica</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {DIAS_SEMANA.map((dia) => (
-                <div key={dia.value} className="flex items-center">
-                  <Checkbox 
-                    inputId={`dia-${dia.value}`} 
-                    name="dia" 
-                    value={dia.value} 
-                    onChange={onDiaChange} 
-                    checked={diasSelecionados.includes(dia.value)} 
-                  />
-                  <label htmlFor={`dia-${dia.value}`} className="ml-2 text-sm text-gray-700 dark:text-gray-300">{dia.label}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Duração Aproximada por Coleta</label>
-            <Dropdown 
-              value={duracao} 
-              options={DURACAO_OPCOES} 
-              onChange={(e) => setDuracao(e.value)} 
-              placeholder="Selecione a duração"
-              className="w-full"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div className="flex flex-col">
-              <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Antecedência Mínima (dias)</label>
-              <InputNumber 
-                value={antecedencia} 
-                onValueChange={(e) => setAntecedencia(e.value)} 
-                min={0} 
-                max={90}
-                useGrouping={false}
-                showButtons
-                className="w-full" 
-                inputClassName="w-full text-center" 
-              />
-              <small className="text-gray-500 mt-1">0 = Permite agendar p/ hoje (Máx: 90 dias)</small>
-            </div>
-            <div className="flex flex-col">
-              <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Máx Coletas / Dia</label>
-              <InputNumber 
-                value={maxColetas} 
-                onValueChange={(e) => setMaxColetas(e.value)} 
-                min={1} 
-                max={50}
-                useGrouping={false}
-                showButtons
-                className="w-full" 
-                inputClassName="w-full text-center" 
-              />
-            </div>
-          </div>
-
-          <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-            <Button label="Salvar Configurações Gerais" icon="pi pi-save" onClick={salvarGeral} loading={salvando} className="w-full theme-btn-primary text-white" />
-          </div>
-        </div>
+        <ConfigGeralForm 
+          diasSelecionados={diasSelecionados}
+          onDiaChange={onDiaChange}
+          duracao={duracao}
+          setDuracao={setDuracao}
+          antecedencia={antecedencia}
+          setAntecedencia={setAntecedencia}
+          maxColetas={maxColetas}
+          setMaxColetas={setMaxColetas}
+          salvarGeral={salvarGeral}
+          salvando={salvando}
+        />
 
         {/* Blocos de Tempo (Só mostra se já tem a config geral salva) */}
         <div className="flex flex-col gap-6">
@@ -283,66 +211,26 @@ export const ConfiguracaoDisponibilidade = () => {
           ) : (
             <>
               {/* Faixas de Horário */}
-              <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
-                <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white"><i className="pi pi-clock mr-2"></i>Faixas de Horários</h3>
-                <div className="flex flex-col sm:flex-row gap-3 mb-4 sm:items-end">
-                  <div className="w-full sm:flex-1">
-                    <label className="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Início</label>
-                    <InputText type="time" value={novaHoraInicio} onChange={(e) => setNovaHoraInicio(e.target.value)} className="w-full" />
-                  </div>
-                  <div className="w-full sm:flex-1">
-                    <label className="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Fim</label>
-                    <InputText type="time" value={novaHoraFim} onChange={(e) => setNovaHoraFim(e.target.value)} className="w-full" />
-                  </div>
-                  <Button type="button" label="Adicionar" icon="pi pi-plus" onClick={addFaixa} className="theme-btn-primary text-white w-full sm:w-auto" />
-                </div>
-                
-                {faixas.length > 0 ? (
-                  <DataTable value={faixas} emptyMessage="Nenhuma faixa cadastrada." size="small">
-                    <Column field="hora_inicio" header="Início" />
-                    <Column field="hora_fim" header="Fim" />
-                    <Column body={actionTemplateFaixa} style={{ width: '4rem' }} />
-                  </DataTable>
-                ) : (
-                  <p className="text-sm text-gray-500 italic">Sem faixas cadastradas. Coletores só poderão selecionar "Dia Inteiro".</p>
-                )}
-              </div>
+              <FaixasHorarioTable 
+                faixas={faixas}
+                novaHoraInicio={novaHoraInicio}
+                setNovaHoraInicio={setNovaHoraInicio}
+                novaHoraFim={novaHoraFim}
+                setNovaHoraFim={setNovaHoraFim}
+                addFaixa={addFaixa}
+                actionTemplateFaixa={actionTemplateFaixa}
+              />
 
               {/* Bloqueios */}
-              <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
-                <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white"><i className="pi pi-calendar-times mr-2"></i>Bloqueios (Feriados/Manutenções)</h3>
-                <div className="flex flex-col sm:flex-row gap-3 mb-4 sm:items-end">
-                  <div className="w-full sm:flex-[2]">
-                    <label className="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Data</label>
-                    <Calendar 
-                      value={novaDataBloqueio} 
-                      onChange={(e) => setNovaDataBloqueio(e.value)} 
-                      dateFormat="dd/mm/yy" 
-                      className="w-full" 
-                      inputClassName="w-full"
-                      showIcon
-                    />
-                  </div>
-                  <div className="w-full sm:flex-[3]">
-                    <label className="block text-xs font-semibold mb-1 text-gray-600 dark:text-gray-400">Motivo (opcional)</label>
-                    <InputText value={novoMotivo} onChange={(e) => setNovoMotivo(e.target.value)} className="w-full" placeholder="Ex: Feriado" />
-                  </div>
-                  <Button type="button" label="Bloquear" icon="pi pi-plus" onClick={addBloqueio} className="theme-btn-primary text-white w-full sm:w-auto" />
-                </div>
-
-                {bloqueios.length > 0 ? (
-                  <DataTable value={bloqueios} emptyMessage="Nenhum bloqueio." size="small">
-                    <Column field="data_bloqueio" header="Data" body={(r) => {
-                      const [year, month, day] = r.data_bloqueio.substring(0, 10).split('-');
-                      return `${day}/${month}/${year}`;
-                    }} />
-                    <Column field="motivo" header="Motivo" />
-                    <Column body={actionTemplateBloqueio} style={{ width: '4rem' }} />
-                  </DataTable>
-                ) : (
-                  <p className="text-sm text-gray-500 italic">Nenhuma data bloqueada.</p>
-                )}
-              </div>
+              <BloqueiosTable 
+                bloqueios={bloqueios}
+                novaDataBloqueio={novaDataBloqueio}
+                setNovaDataBloqueio={setNovaDataBloqueio}
+                novoMotivo={novoMotivo}
+                setNovoMotivo={setNovoMotivo}
+                addBloqueio={addBloqueio}
+                actionTemplateBloqueio={actionTemplateBloqueio}
+              />
             </>
           )}
         </div>

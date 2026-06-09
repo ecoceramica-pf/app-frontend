@@ -5,6 +5,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { Toast } from 'primereact/toast';
 import { Paginator } from 'primereact/paginator';
 import { ofertasService } from '../services/ofertasService';
+import { formatarDataCurta, formatarDataHora } from '../utils/formatters';
 
 export const MeusResiduos = () => {
   const navigate = useNavigate();
@@ -43,21 +44,6 @@ export const MeusResiduos = () => {
   const onPageChange = (event) => {
     setFirst(event.first);
     fetchOfertas(event.page + 1);
-  };
-
-  const formatarData = (isoDate) => {
-    if (!isoDate) return '';
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit', month: 'short', year: 'numeric'
-    }).format(new Date(isoDate));
-  };
-
-  const formatarDataHora = (isoDate) => {
-    if (!isoDate) return '';
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
-    }).format(new Date(isoDate));
   };
 
 
@@ -130,7 +116,7 @@ export const MeusResiduos = () => {
                     </h3>
                   </div>
                   <span className="text-xs font-medium text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">
-                    {formatarData(oferta.data_publicacao)}
+                    {formatarDataCurta(oferta.data_publicacao)}
                   </span>
                 </div>
 
