@@ -43,7 +43,7 @@ export const Landing = () => {
   };
 
   return (
-    <div className="bg-gray-50 text-gray-900 font-sans selection:bg-primary/20 overflow-x-hidden">
+    <div className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-primary/20 overflow-x-hidden transition-colors duration-300">
       <LandingNavbar scrollToSection={scrollToSection} />
 
       <main className="pt-20">
@@ -75,34 +75,34 @@ export const Landing = () => {
         </section>
 
         {/* Seção de Benefícios */}
-        <section id="beneficios" className="py-20 px-6 md:px-12 bg-white border-b border-gray-100">
+        <section id="beneficios" className="py-20 px-6 md:px-12 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
           <div className="max-w-7xl mx-auto animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Benefícios para o Ecossistema</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary dark:text-blue-400 mb-4 transition-colors duration-300">Benefícios para o Ecossistema</h2>
               <div className="h-1.5 w-24 bg-detail mx-auto rounded-full"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Card 1 */}
-              <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl border-l-[8px] border-detail hover:-translate-y-2 transition-all duration-300 border-y border-r border-gray-100">
+              <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl border-l-[8px] border-detail hover:-translate-y-2 transition-all duration-300 border-y border-r border-gray-100 dark:border-gray-700">
                 <div className="mb-6 text-5xl">🏭</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">Para Fábricas</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Para Fábricas</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   Registre seus resíduos de forma fácil e ache coletores interessados em reutilizar materiais descartados.
                 </p>
               </div>
               {/* Card 2 */}
-              <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl border-l-[8px] border-secondary hover:-translate-y-2 transition-all duration-300 border-y border-r border-gray-100">
+              <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl border-l-[8px] border-secondary hover:-translate-y-2 transition-all duration-300 border-y border-r border-gray-100 dark:border-gray-700">
                 <div className="mb-6 text-5xl">👷</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">Para Coletores</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Para Coletores</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   Encontre resíduos disponíveis próximos a você e ganhe renda ativa com a logística de reutilização.
                 </p>
               </div>
               {/* Card 3 */}
-              <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl border-l-[8px] border-primary hover:-translate-y-2 transition-all duration-300 border-y border-r border-gray-100">
+              <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl border-l-[8px] border-primary hover:-translate-y-2 transition-all duration-300 border-y border-r border-gray-100 dark:border-gray-700">
                 <div className="mb-6 text-5xl">🌱</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">Para o Meio Ambiente</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Para o Meio Ambiente</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   Reduza drasticamente o desperdício em aterros e contribua diretamente para uma economia circular robusta.
                 </p>
               </div>
@@ -111,7 +111,7 @@ export const Landing = () => {
         </section>
 
         {/* Banner de Estatísticas */}
-        <section className="bg-primary text-white py-20">
+        <section className="bg-primary dark:bg-primary/90 text-white py-20 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-6 animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
               <div className="space-y-3">
@@ -131,46 +131,46 @@ export const Landing = () => {
         </section>
 
         {/* Como Funciona */}
-        <section id="como-funciona" className="py-20 px-6 md:px-12 bg-gray-50 border-b border-gray-200">
+        <section id="como-funciona" className="py-20 px-6 md:px-12 bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
           <div className="max-w-7xl mx-auto animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-            <h2 className="text-3xl md:text-4xl font-bold text-center text-primary mb-16">Como Funciona</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-primary dark:text-blue-400 mb-16 transition-colors duration-300">Como Funciona</h2>
             <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative">
               <div className="flex-1 text-center group">
-                <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 transition-colors shadow-sm">
-                  <i className="pi pi-file-edit text-3xl text-primary"></i>
+                <div className="w-20 h-20 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 dark:group-hover:bg-primary/30 transition-colors shadow-sm">
+                  <i className="pi pi-file-edit text-3xl text-primary dark:text-primary/90"></i>
                 </div>
-                <h4 className="text-xl font-bold mb-2 text-gray-900">1. Registre</h4>
-                <p className="text-gray-600 px-4">Crie seu cadastro na plataforma</p>
+                <h4 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">1. Registre</h4>
+                <p className="text-gray-600 dark:text-gray-300 px-4">Crie seu cadastro na plataforma</p>
               </div>
-              <i className="hidden md:block pi pi-arrow-right text-3xl text-gray-300"></i>
+              <i className="hidden md:block pi pi-arrow-right text-3xl text-gray-300 dark:text-gray-600"></i>
               <div className="flex-1 text-center group">
-                <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 transition-colors shadow-sm">
-                  <i className="pi pi-upload text-3xl text-primary"></i>
+                <div className="w-20 h-20 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 dark:group-hover:bg-primary/30 transition-colors shadow-sm">
+                  <i className="pi pi-upload text-3xl text-primary dark:text-primary/90"></i>
                 </div>
-                <h4 className="text-xl font-bold mb-2 text-gray-900">2. Publique</h4>
-                <p className="text-gray-600 px-4">Publique ou reserve materiais</p>
+                <h4 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">2. Publique</h4>
+                <p className="text-gray-600 dark:text-gray-300 px-4">Publique ou reserve materiais</p>
               </div>
-              <i className="hidden md:block pi pi-arrow-right text-3xl text-gray-300"></i>
+              <i className="hidden md:block pi pi-arrow-right text-3xl text-gray-300 dark:text-gray-600"></i>
               <div className="flex-1 text-center group">
-                <div className="w-20 h-20 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-secondary/20 transition-colors shadow-sm">
-                  <i className="pi pi-check-circle text-3xl text-secondary"></i>
+                <div className="w-20 h-20 bg-secondary/10 dark:bg-secondary/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-secondary/20 dark:group-hover:bg-secondary/30 transition-colors shadow-sm">
+                  <i className="pi pi-check-circle text-3xl text-secondary dark:text-secondary/90"></i>
                 </div>
-                <h4 className="text-xl font-bold mb-2 text-gray-900">3. Conclua</h4>
-                <p className="text-gray-600 px-4">Finalize a entrega do resíduo</p>
+                <h4 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">3. Conclua</h4>
+                <p className="text-gray-600 dark:text-gray-300 px-4">Finalize a entrega do resíduo</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* CTA Final */}
-        <section className="py-20 px-6 bg-white text-center">
+        <section className="py-20 px-6 bg-white dark:bg-gray-900 text-center transition-colors duration-300">
           <div className="max-w-3xl mx-auto space-y-8 animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-            <h2 className="text-4xl font-bold text-gray-900">Pronto para começar?</h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">Pronto para começar?</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
               Nascida em Porto Ferreira, a Capital da Cerâmica e Decoração, nossa plataforma conecta quem produz a quem transforma.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-6 pt-4">
-              <Link to="/login" className="w-full sm:w-auto px-10 py-4 rounded-lg border-2 border-primary text-primary font-bold text-lg hover:bg-primary/5 transition-colors">
+              <Link to="/login" className="w-full sm:w-auto px-10 py-4 rounded-lg border-2 border-primary dark:border-blue-400 text-primary dark:text-blue-400 font-bold text-lg hover:bg-primary/5 dark:hover:bg-blue-400/10 transition-colors">
                 Fazer Login
               </Link>
               <Link to="/register" className="w-full sm:w-auto px-10 py-4 rounded-lg bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-opacity shadow-lg">
