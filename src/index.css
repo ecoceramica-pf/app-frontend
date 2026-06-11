@@ -19,7 +19,7 @@
 }
 
 /* Ensina o Tailwind v4 a usar a classe .dark no <html> para ativar o dark mode.
-   Isso alinha com o toggle no DarkModeToggle.jsx que adiciona/remove .dark */
+   Isso alinha com o toggle no AccessibilityMenu.jsx que adiciona/remove .dark */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ═══════════════════════════════════════════════════════════════════════════════

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { DarkModeToggle } from '../DarkModeToggle';
+import { AccessibilityMenu } from '../AccessibilityMenu';
 
 export const AppLayout = ({ children }) => {
   return (
@@ -15,7 +15,7 @@ export const AppLayout = ({ children }) => {
           </div>
         </main>
       </div>
-      <DarkModeToggle />
+      <AccessibilityMenu />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { Toast } from 'primereact/toast';
 import { Card } from 'primereact/card';
 import { InputMask } from 'primereact/inputmask';
 import { authService } from '../services/authService';
+import { unmask } from '../utils/formatters';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +29,6 @@ export const Register = () => {
     { name: 'Fábrica/Gerador', code: 'fabrica' }
   ];
 
-  const unmask = (val) => val ? val.replace(/\D/g, '') : '';
 
   const handleChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
