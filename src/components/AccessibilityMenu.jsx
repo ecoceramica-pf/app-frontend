@@ -37,32 +37,19 @@ export function AccessibilityMenu() {
     html.classList.add('theme-transition');
 
     // 1. Tema Escuro
-    if (settings.theme === 'dark') {
-      html.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      html.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
+    html.classList.toggle('dark', settings.theme === 'dark');
+    localStorage.setItem('theme', settings.theme);
 
     // 2. Tamanho da Fonte (usando rem no Tailwind, alterar no html afeta tudo)
     html.style.fontSize = `${settings.fontSize}px`;
 
     // 3. Alto Contraste & Daltonismo via CSS filters
-    let filterString = '';
-    
-    if (settings.highContrast) {
-      html.classList.add('high-contrast');
-      filterString += settings.theme === 'dark' ? 'contrast(150%) saturate(150%) ' : 'contrast(125%) saturate(150%) ';
-    } else {
-      html.classList.remove('high-contrast');
-    }
+    html.classList.toggle('high-contrast', settings.highContrast);
 
-    if (settings.daltonism !== 'none') {
-      filterString += `url('#${settings.daltonism}') `;
-    }
-
-    html.style.filter = filterString.trim();
+    html.style.filter = [
+      settings.highContrast && (settings.theme === 'dark' ? 'contrast(150%) saturate(150%)' : 'contrast(125%) saturate(150%)'),
+      settings.daltonism !== 'none' && `url('#${settings.daltonism}')`
+    ].filter(Boolean).join(' ');
 
     // Persiste as configurações gerais
     localStorage.setItem('accessibility_settings', JSON.stringify(settings));
