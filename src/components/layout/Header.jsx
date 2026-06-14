@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { Avatar } from 'primereact/avatar';
 import { Menu } from 'primereact/menu';
+import { NotificationDropdown } from '../common/NotificationDropdown';
 
 export const Header = () => {
   const { user, logout } = useContext(AuthContext);
@@ -34,6 +35,7 @@ export const Header = () => {
       </div>
 
       <div className="flex items-center gap-4">
+        <NotificationDropdown />
         
         <div 
           className="flex items-center gap-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors"

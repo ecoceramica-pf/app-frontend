@@ -23,6 +23,11 @@ export const GerenciarOfertaHeader = ({ oferta, navigate, handleAlterarStatus, l
                 oferta.quantidade_cacamba ? `${oferta.quantidade_cacamba} caçamba(s)` : null
               ].filter(Boolean).join(' + ')}
             </span>
+            <span className="text-gray-400 dark:text-gray-600 hidden sm:inline">•</span>
+            <span className="text-gray-600 dark:text-gray-400 text-sm font-medium flex items-center gap-1.5">
+              <i className="pi pi-map-marker text-xs opacity-70"></i>
+              {oferta.endereco ? `${oferta.endereco.logradouro}, ${oferta.endereco.numero} - ${oferta.endereco.bairro}` : 'Endereço não informado'}
+            </span>
           </div>
         </div>
       </div>

@@ -14,6 +14,7 @@ import { ConfiguracaoDisponibilidade } from '../pages/ConfiguracaoDisponibilidad
 import { GerenciarOferta } from '../pages/GerenciarOferta';
 import { ForgotPassword } from '../pages/ForgotPassword';
 import { ResetPassword } from '../pages/ResetPassword';
+import { Historico } from '../pages/Historico';
 import { AppLayout } from '../components/layout/AppLayout';
 
 const PrivateRoute = ({ children }) => {
@@ -123,6 +124,17 @@ export const AppRoutes = () => {
             <PrivateRoute>
               <AppLayout>
                 <MinhasColetas />
+              </AppLayout>
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/historico" 
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <Historico />
               </AppLayout>
             </PrivateRoute>
           } 

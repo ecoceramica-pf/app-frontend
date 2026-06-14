@@ -18,6 +18,12 @@ export const Sidebar = () => {
             icon: 'pi pi-home',
             command: () => navigate('/dashboard'),
             className: location.pathname === '/dashboard' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
+          },
+          {
+            label: 'Histórico',
+            icon: 'pi pi-history',
+            command: () => navigate('/historico'),
+            className: location.pathname === '/historico' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }
         ]
       },
