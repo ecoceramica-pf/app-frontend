@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Dialog } from 'primereact/dialog';
@@ -22,7 +22,8 @@ export const MuralOfertas = () => {
   const [ofertaSelecionada, setOfertaSelecionada] = useState(null);
   const [first, setFirst] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [viewMode, setViewMode] = useState('lista'); // 'lista' ou 'mapa'
+  const location = useLocation();
+  const [viewMode, setViewMode] = useState(location.state?.tab || 'lista'); // 'lista' ou 'mapa'
   
   // States para o Agendamento
   const [agendamentoStep, setAgendamentoStep] = useState(0); // 0 = Detalhes, 1 = Selecionar Data/Slot

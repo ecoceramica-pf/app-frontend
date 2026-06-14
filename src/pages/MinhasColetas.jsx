@@ -25,7 +25,14 @@ export const MinhasColetas = () => {
     try {
       const response = await coletasService.minhasColetas({ page });
       const dados = response.data ? response.data : response;
-      setColetas(Array.isArray(dados) ? dados : []);
+      let coletasData = Array.isArray(dados) ? dados : [];
+      coletasData.sort((a, b) => {
+        const dateA = new Date(a.data_agendamento || a.data_reserva || 0);
+        const dateB = new Date(b.data_agendamento || b.data_reserva || 0);
+        // Datas mais próximas primeiro (crescente)
+        return dateA - dateB;
+      });
+      setColetas(coletasData);
       if (response.meta) {
         setTotalRecords(response.meta.total);
       }

@@ -12,6 +12,10 @@ export const coletasService = {
     const response = await api.get('/minhas-coletas', { params });
     return response.data;
   },
+  coletasFabrica: async (params) => {
+    const response = await api.get('/coletas-fabrica', { params });
+    return response.data;
+  },
   detalharColeta: async (id) => {
     const response = await api.get(`/coletas/${id}`);
     return response.data;

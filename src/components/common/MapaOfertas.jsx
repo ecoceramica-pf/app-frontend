@@ -48,7 +48,7 @@ export const MapaOfertas = ({ ofertas, onAgendarClick }) => {
   );
 
   let bounds = null;
-  let center = [-23.5505, -46.6333]; // SP default
+  let center = [-21.8532, -47.4729]; // Porto Ferreira default
   
   if (ofertasComCoords.length > 0) {
     const latLngs = ofertasComCoords.map(o => [o.endereco.localizacao[1], o.endereco.localizacao[0]]);

@@ -51,7 +51,7 @@ export const Login = () => {
         }}
       >
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-primary dark:text-primary/90 mb-2 tracking-tight">Ecocerâmica</h1>
+          <h1 className="text-4xl font-extrabold text-primary dark:text-primary/90 mb-2 tracking-tight">EcoCerâmica PF</h1>
           <p className="text-gray-500 dark:text-gray-400 font-medium">Entre na plataforma de sustentabilidade</p>
         </div>
 
@@ -100,7 +100,7 @@ export const Login = () => {
 
         <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
           Ainda não tem uma conta?{' '}
-          <Link to="/register" className="font-bold text-primary dark:text-primary/90 hover:text-primary/80 transition-colors hover:underline">
+          <Link to="/cadastro" className="font-bold text-primary dark:text-primary/90 hover:text-primary/80 transition-colors hover:underline">
             Cadastre-se agora
           </Link>
         </div>

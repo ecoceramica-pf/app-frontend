@@ -14,6 +14,8 @@ import { ConfiguracaoDisponibilidade } from '../pages/ConfiguracaoDisponibilidad
 import { GerenciarOferta } from '../pages/GerenciarOferta';
 import { ForgotPassword } from '../pages/ForgotPassword';
 import { ResetPassword } from '../pages/ResetPassword';
+import { Historico } from '../pages/Historico';
+import { AgendamentosFabrica } from '../pages/AgendamentosFabrica';
 import { AppLayout } from '../components/layout/AppLayout';
 
 const PrivateRoute = ({ children }) => {
@@ -36,7 +38,7 @@ export const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/cadastro" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         
@@ -107,6 +109,17 @@ export const AppRoutes = () => {
         />
 
         <Route 
+          path="/agendamentos" 
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <AgendamentosFabrica />
+              </AppLayout>
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
           path="/meus-residuos/:id/gerenciar" 
           element={
             <PrivateRoute>
@@ -123,6 +136,17 @@ export const AppRoutes = () => {
             <PrivateRoute>
               <AppLayout>
                 <MinhasColetas />
+              </AppLayout>
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/historico" 
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <Historico />
               </AppLayout>
             </PrivateRoute>
           } 

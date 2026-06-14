@@ -28,7 +28,7 @@ export const LandingNavbar = ({ scrollToSection }) => {
           <Link to="/login" className="bg-white dark:bg-gray-900 text-primary dark:text-blue-400 border-2 border-primary dark:border-blue-400 px-6 py-2 rounded-lg font-bold hover:bg-primary/5 dark:hover:bg-blue-400/10 transition-colors">
             Entrar
           </Link>
-          <Link to="/register" className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-sm">
+          <Link to="/cadastro" className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-sm">
             Cadastrar
           </Link>
         </div>
@@ -53,7 +53,7 @@ export const LandingNavbar = ({ scrollToSection }) => {
             <Link to="/login" className="w-full text-center bg-white dark:bg-gray-800 text-primary dark:text-blue-400 border-2 border-primary dark:border-blue-400 px-6 py-3 rounded-lg font-bold hover:bg-primary/5 dark:hover:bg-blue-400/10 transition-colors">
               Entrar
             </Link>
-            <Link to="/register" className="w-full text-center bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-sm">
+            <Link to="/cadastro" className="w-full text-center bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary/90 transition-colors shadow-sm">
               Cadastrar
             </Link>
           </div>

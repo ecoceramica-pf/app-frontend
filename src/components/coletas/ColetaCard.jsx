@@ -64,16 +64,18 @@ export const ColetaCard = ({ coleta, onGerenciar, getStatusClass }) => {
       </div>
 
       {/* Card Footer */}
-      <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto flex justify-between items-center">
-        <span className="text-xs font-medium text-gray-500">
-          Reservado em {formatarData(coleta.data_reserva)}
-        </span>
+      <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto flex flex-col gap-3">
+        <div className="flex justify-between items-center w-full">
+          <span className="text-xs font-medium text-gray-500">
+            Reservado em {formatarData(coleta.data_reserva)}
+          </span>
+        </div>
         <Button 
-          label="Gerenciar" 
+          label="Gerenciar Agendamento" 
           icon="pi pi-cog" 
           iconPos="right"
+          className="w-full text-sm font-bold justify-center border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 py-2"
           outlined
-          className="text-sm font-bold border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 py-1"
           onClick={() => onGerenciar(coleta)}
         />
       </div>

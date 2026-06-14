@@ -86,7 +86,7 @@ export const CadastrarResiduo = () => {
       };
 
       await ofertasService.criarOferta(payload);
-      navigate('/dashboard');
+      navigate('/meus-residuos');
     } catch (error) {
       console.error('Erro ao salvar oferta:', error);
       toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao publicar a oferta. Verifique os dados e tente novamente.', life: 4000 });
@@ -212,7 +212,7 @@ export const CadastrarResiduo = () => {
             label="Cancelar" 
             outlined 
             className="w-full py-3 font-bold text-lg justify-center text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800" 
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/meus-residuos')}
           />
         </div>
       </form>
