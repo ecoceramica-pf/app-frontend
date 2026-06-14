@@ -63,7 +63,7 @@ export const Landing = () => {
               </p>
 
               <div className="pt-2 w-full flex flex-col sm:flex-row justify-center gap-6">
-                <Link to="/register" className="bg-primary text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
+                <Link to="/cadastro" className="bg-primary text-white px-10 py-4 rounded-full font-semibold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
                   Começar a Impactar
                 </Link>
                 <a href="#beneficios" onClick={(e) => scrollToSection(e, '#beneficios')} className="px-10 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all shadow-sm hover:-translate-y-1">
@@ -173,7 +173,7 @@ export const Landing = () => {
               <Link to="/login" className="w-full sm:w-auto px-10 py-4 rounded-lg border-2 border-primary dark:border-blue-400 text-primary dark:text-blue-400 font-bold text-lg hover:bg-primary/5 dark:hover:bg-blue-400/10 transition-colors">
                 Fazer Login
               </Link>
-              <Link to="/register" className="w-full sm:w-auto px-10 py-4 rounded-lg bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-opacity shadow-lg">
+              <Link to="/cadastro" className="w-full sm:w-auto px-10 py-4 rounded-lg bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-opacity shadow-lg">
                 Criar Conta
               </Link>
             </div>

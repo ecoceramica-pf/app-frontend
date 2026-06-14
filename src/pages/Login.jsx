@@ -100,7 +100,7 @@ export const Login = () => {
 
         <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
           Ainda não tem uma conta?{' '}
-          <Link to="/register" className="font-bold text-primary dark:text-primary/90 hover:text-primary/80 transition-colors hover:underline">
+          <Link to="/cadastro" className="font-bold text-primary dark:text-primary/90 hover:text-primary/80 transition-colors hover:underline">
             Cadastre-se agora
           </Link>
         </div>
