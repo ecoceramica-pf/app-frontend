@@ -3,10 +3,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { Menu } from 'primereact/menu';
 
-export const Sidebar = () => {
+export const Sidebar = ({ isOpen, setIsOpen }) => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleNav = (path) => {
+    navigate(path);
+    if (setIsOpen) setIsOpen(false);
+  };
 
   const getMenuItems = () => {
     const items = [
@@ -16,19 +21,19 @@ export const Sidebar = () => {
           {
             label: 'Painel',
             icon: 'pi pi-home',
-            command: () => navigate('/dashboard'),
+            command: () => handleNav('/dashboard'),
             className: location.pathname === '/dashboard' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           },
           ...(user?.tipo_perfil === 'fabrica' ? [{
             label: 'Agendamentos',
             icon: 'pi pi-calendar',
-            command: () => navigate('/agendamentos'),
+            command: () => handleNav('/agendamentos'),
             className: location.pathname === '/agendamentos' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }] : []),
           {
             label: 'Histórico',
             icon: 'pi pi-history',
-            command: () => navigate('/historico'),
+            command: () => handleNav('/historico'),
             className: location.pathname === '/historico' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }
         ]
@@ -39,32 +44,32 @@ export const Sidebar = () => {
           {
             label: 'Meus Resíduos',
             icon: 'pi pi-list',
-            command: () => navigate('/meus-residuos'),
+            command: () => handleNav('/meus-residuos'),
             className: location.pathname === '/meus-residuos' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           },
           {
             label: 'Cadastrar Resíduos',
             icon: 'pi pi-plus',
-            command: () => navigate('/cadastrar-residuo'),
+            command: () => handleNav('/cadastrar-residuo'),
             className: location.pathname === '/cadastrar-residuo' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           },
           {
             label: 'Configurar Disponibilidade',
             icon: 'pi pi-calendar-times',
-            command: () => navigate('/disponibilidade'),
+            command: () => handleNav('/disponibilidade'),
             className: location.pathname === '/disponibilidade' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }
         ] : [
           {
             label: 'Resíduos Disponíveis',
             icon: 'pi pi-list',
-            command: () => navigate('/mural'),
+            command: () => handleNav('/mural'),
             className: location.pathname === '/mural' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           },
           {
             label: 'Minhas Coletas',
             icon: 'pi pi-truck',
-            command: () => navigate('/minhas-coletas'),
+            command: () => handleNav('/minhas-coletas'),
             className: location.pathname === '/minhas-coletas' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }
         ]
@@ -78,7 +83,7 @@ export const Sidebar = () => {
           {
             label: 'Materiais',
             icon: 'pi pi-box',
-            command: () => navigate('/materiais'),
+            command: () => handleNav('/materiais'),
             className: location.pathname === '/materiais' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }
         ]
@@ -89,7 +94,7 @@ export const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 hidden md:flex flex-col h-screen fixed left-0 top-0 shadow-sm z-20">
+    <aside className={`w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col h-screen fixed left-0 top-0 shadow-sm z-30 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
       <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800">
         <h1 className="text-xl font-black text-primary dark:text-white tracking-tight flex items-center gap-2">
           <i className="pi pi-leaf text-2xl"></i>
@@ -100,14 +105,17 @@ export const Sidebar = () => {
       <div className="flex-1 overflow-y-auto py-4 px-3 custom-sidebar-menu">
         <Menu 
           model={getMenuItems()} 
-          className="w-full border-none bg-transparent"
+          className="w-full border-none bg-transparent focus:outline-none"
+          tabIndex={-1}
           pt={{
-            menuitem: { className: 'rounded-lg mb-1 overflow-hidden' },
-            content: { className: 'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors' },
-            action: { className: 'p-3 text-gray-700 dark:text-gray-300' },
+            root: { className: 'focus:outline-none' },
+            menu: { className: 'focus:outline-none' },
+            menuitem: { className: 'rounded-lg mb-1 overflow-hidden focus:outline-none' },
+            content: { className: 'bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:bg-transparent focus:outline-none' },
+            action: { className: 'p-3 text-gray-700 dark:text-gray-300 focus:outline-none focus:bg-transparent' },
             icon: { className: 'text-gray-500 dark:text-gray-400 mr-3' },
             label: { className: 'font-medium' },
-            submenuHeader: { className: 'bg-transparent text-xs font-bold uppercase tracking-wider text-gray-400 mt-4 mb-2' }
+            submenuHeader: { className: 'bg-transparent text-xs font-bold uppercase tracking-wider text-gray-400 mt-4 mb-2 focus:outline-none' }
           }}
         />
       </div>

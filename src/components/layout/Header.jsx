@@ -5,7 +5,7 @@ import { Avatar } from 'primereact/avatar';
 import { Menu } from 'primereact/menu';
 import { NotificationDropdown } from '../common/NotificationDropdown';
 
-export const Header = () => {
+export const Header = ({ onMenuClick }) => {
   const { user, logout } = useContext(AuthContext);
   const menu = useRef(null);
   const navigate = useNavigate();
@@ -31,6 +31,13 @@ export const Header = () => {
   return (
     <header className="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm">
       <div className="flex items-center gap-4">
+        <button 
+          className="p-2 -ml-2 mr-2 text-gray-600 hover:bg-gray-100 rounded-lg md:hidden dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+          onClick={onMenuClick}
+          aria-label="Abrir menu"
+        >
+          <i className="pi pi-bars text-xl"></i>
+        </button>
         {/* Espaço para um título de página dinâmico no futuro, se necessário */}
       </div>
 
