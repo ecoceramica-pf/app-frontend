@@ -15,6 +15,7 @@ import { GerenciarOferta } from '../pages/GerenciarOferta';
 import { ForgotPassword } from '../pages/ForgotPassword';
 import { ResetPassword } from '../pages/ResetPassword';
 import { Historico } from '../pages/Historico';
+import { AgendamentosFabrica } from '../pages/AgendamentosFabrica';
 import { AppLayout } from '../components/layout/AppLayout';
 
 const PrivateRoute = ({ children }) => {
@@ -102,6 +103,17 @@ export const AppRoutes = () => {
             <PrivateRoute>
               <AppLayout>
                 <MeusResiduos />
+              </AppLayout>
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/agendamentos" 
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <AgendamentosFabrica />
               </AppLayout>
             </PrivateRoute>
           } 

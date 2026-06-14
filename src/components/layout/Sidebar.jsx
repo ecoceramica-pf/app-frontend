@@ -19,6 +19,12 @@ export const Sidebar = () => {
             command: () => navigate('/dashboard'),
             className: location.pathname === '/dashboard' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           },
+          ...(user?.tipo_perfil === 'fabrica' ? [{
+            label: 'Agendamentos',
+            icon: 'pi pi-calendar',
+            command: () => navigate('/agendamentos'),
+            className: location.pathname === '/agendamentos' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
+          }] : []),
           {
             label: 'Histórico',
             icon: 'pi pi-history',

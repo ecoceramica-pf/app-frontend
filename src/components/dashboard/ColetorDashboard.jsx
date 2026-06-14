@@ -96,7 +96,10 @@ export const ColetorDashboard = () => {
             </div>
 
             {/* Action 3 */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-detail transition-all duration-200 group flex flex-col items-start cursor-pointer">
+            <div 
+              className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-detail transition-all duration-200 group flex flex-col items-start cursor-pointer"
+              onClick={() => navigate('/mural', { state: { tab: 'mapa' } })}
+            >
               <div className="w-12 h-12 rounded-full bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center text-detail group-hover:bg-detail group-hover:text-white transition-colors mb-4">
                 <i className="pi pi-map text-xl"></i>
               </div>
