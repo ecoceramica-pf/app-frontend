@@ -75,7 +75,10 @@ export const Register = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-surface via-white to-primary/10 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4 md:p-8 transition-colors duration-300 font-sans">
+    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-surface via-white to-primary/10 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4 md:p-8 transition-colors duration-300 font-sans relative">
+      <Link to="/" className="absolute top-6 left-6 text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors flex items-center gap-2 font-semibold">
+        <i className="pi pi-arrow-left"></i> Voltar ao site
+      </Link>
       <Toast ref={toast} />
       
       <Card className="w-full max-w-2xl shadow-2xl rounded-[var(--radius-card)] border border-gray-100 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">

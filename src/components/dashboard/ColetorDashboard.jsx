@@ -25,7 +25,7 @@ export const ColetorDashboard = () => {
     setLoading(true);
     try {
       const [ofertasData, coletasData] = await Promise.all([
-        ofertasService.listarOfertas({ status: 'Disponivel' }),
+        ofertasService.listarOfertas({ status: 'disponivel' }),
         coletasService.minhasColetas()
       ]);
       
@@ -39,8 +39,8 @@ export const ColetorDashboard = () => {
   };
 
   const totalOfertas = ofertasDisponiveis.length;
-  const coletasAtivas = minhasColetas.filter(c => ['Agendado', 'Em Processo', 'Pendente'].includes(c.status)).length;
-  const kgColetados = minhasColetas.filter(c => c.status === 'Concluido').reduce((acc, curr) => acc + (Number(curr.oferta_residuo?.quantidade_kg) || 0), 0);
+  const coletasAtivas = minhasColetas.filter(c => ['agendado', 'pendente'].includes(c.status?.toLowerCase())).length;
+  const kgColetados = minhasColetas.filter(c => c.status?.toLowerCase() === 'concluido').reduce((acc, curr) => acc + (Number(curr.oferta_residuo?.quantidade_kg) || 0), 0);
   const displayUserName = user?.nome || user?.name || 'Coletor';
 
   // Get current page items
@@ -59,6 +59,13 @@ export const ColetorDashboard = () => {
   const formatarData = (isoDate) => {
     if (!isoDate) return '';
     return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(new Date(isoDate));
+  };
+
+  const formatarDataHora = (isoDate) => {
+    if (!isoDate) return '';
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+    }).format(new Date(isoDate)).replace(',', ' às');
   };
 
   return (
@@ -107,7 +114,10 @@ export const ColetorDashboard = () => {
             </div>
 
             {/* Action 4 */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-primary transition-all duration-200 group flex flex-col items-start cursor-pointer">
+            <div 
+              className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-primary transition-all duration-200 group flex flex-col items-start cursor-pointer"
+              onClick={() => navigate('/meu-impacto')}
+            >
               <div className="w-12 h-12 rounded-full bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors mb-4">
                 <i className="pi pi-chart-line text-xl"></i>
               </div>
@@ -139,12 +149,12 @@ export const ColetorDashboard = () => {
             </div>
 
             {/* Metric 3 */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 border-l-4 border-l-purple-500 p-6 shadow-sm flex items-center justify-between">
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 border-l-4 border-l-secondary p-6 shadow-sm flex items-center justify-between">
                <div>
                   <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total Coletado (kg)</p>
-                  <p className="text-3xl font-bold text-purple-500">{kgColetados}</p>
+                  <p className="text-3xl font-bold text-secondary">{kgColetados}</p>
                </div>
-               <i className="pi pi-sync text-purple-500 text-4xl opacity-20"></i>
+               <i className="pi pi-sync text-secondary text-4xl opacity-20"></i>
             </div>
          </div>
 
@@ -190,10 +200,17 @@ export const ColetorDashboard = () => {
                             <i className="pi pi-building text-sm"></i>
                             <span className="text-sm truncate font-medium">De: {coleta.oferta_residuo?.usuario?.razao_social || coleta.oferta_residuo?.usuario?.name || 'Fábrica Parceira'}</span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-gray-500">
-                              Reservado em {formatarData(coleta.data_reserva)}
-                            </span>
+                          <div className="flex justify-between items-end">
+                            <div className="flex flex-col gap-1">
+                              <span className="text-xs text-gray-500">
+                                Reservado em {formatarData(coleta.data_reserva)}
+                              </span>
+                              {coleta.data_agendamento && (
+                                <span className="text-xs font-bold text-primary">
+                                  Agendado: {formatarDataHora(coleta.data_agendamento)}
+                                </span>
+                              )}
+                            </div>
                             <div>
                               <Button icon="pi pi-angle-right" rounded text severity="secondary" />
                             </div>

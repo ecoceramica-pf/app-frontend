@@ -31,8 +31,8 @@ export const FabricaDashboard = () => {
   };
 
   const totalOfertas = ofertas.length;
-  const coletasConcluidas = ofertas.filter(o => o.status === 'Concluido').length;
-  const kgReutilizados = ofertas.filter(o => o.status === 'Concluido').reduce((acc, curr) => acc + (Number(curr.quantidade_kg) || 0), 0);
+  const coletasConcluidas = ofertas.filter(o => o.status?.toLowerCase() === 'concluido').length;
+  const kgReutilizados = ofertas.filter(o => o.status?.toLowerCase() === 'concluido').reduce((acc, curr) => acc + (Number(curr.quantidade_kg) || 0), 0);
   const displayUserName = user?.razao_social || user?.nome || user?.name || 'Fábrica';
 
   // Get current page items
@@ -73,19 +73,24 @@ export const FabricaDashboard = () => {
             </div>
 
             {/* Action 3 */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-detail transition-all duration-200 group flex flex-col items-start cursor-pointer">
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-detail transition-all duration-200 group flex flex-col items-start cursor-pointer"
+              onClick={() => navigate('/agendamentos')}
+            >
               <div className="w-12 h-12 rounded-full bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center text-detail group-hover:bg-detail group-hover:text-white transition-colors mb-4">
                 <i className="pi pi-calendar text-xl"></i>
               </div>
-              <span className="font-semibold text-gray-800 dark:text-gray-100">Agendamento de Coleta</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-100">Agendamentos de Coletas</span>
             </div>
 
             {/* Action 4 */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-primary transition-all duration-200 group flex flex-col items-start cursor-pointer">
-              <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors mb-4">
-                <i className="pi pi-map-marker text-xl"></i>
+            <div 
+              className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-primary transition-all duration-200 group flex flex-col items-start cursor-pointer"
+              onClick={() => navigate('/meu-impacto')}
+            >
+              <div className="w-12 h-12 rounded-full bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors mb-4">
+                <i className="pi pi-chart-line text-xl"></i>
               </div>
-              <span className="font-semibold text-gray-800 dark:text-gray-100">Mapa da Cidade</span>
+              <span className="font-semibold text-gray-800 dark:text-gray-100">Meu Impacto</span>
             </div>
          </div>
       </section>

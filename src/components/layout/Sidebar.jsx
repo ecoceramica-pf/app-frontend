@@ -35,6 +35,12 @@ export const Sidebar = ({ isOpen, setIsOpen }) => {
             icon: 'pi pi-history',
             command: () => handleNav('/historico'),
             className: location.pathname === '/historico' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
+          },
+          {
+            label: 'Meu Impacto',
+            icon: 'pi pi-chart-line',
+            command: () => handleNav('/meu-impacto'),
+            className: location.pathname === '/meu-impacto' ? 'bg-primary/10 text-primary font-bold border-r-4 border-primary' : ''
           }
         ]
       },

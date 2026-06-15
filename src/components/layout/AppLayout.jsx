@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { AccessibilityMenu } from '../AccessibilityMenu';
 
 export const AppLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -24,7 +23,6 @@ export const AppLayout = ({ children }) => {
           </div>
         </main>
       </div>
-      <AccessibilityMenu />
     </div>
   );
 };
