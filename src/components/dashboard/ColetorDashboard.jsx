@@ -61,6 +61,13 @@ export const ColetorDashboard = () => {
     return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(new Date(isoDate));
   };
 
+  const formatarDataHora = (isoDate) => {
+    if (!isoDate) return '';
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+    }).format(new Date(isoDate)).replace(',', ' às');
+  };
+
   return (
     <div className="flex flex-col gap-6">
       {/* Hero Section */}
@@ -193,10 +200,17 @@ export const ColetorDashboard = () => {
                             <i className="pi pi-building text-sm"></i>
                             <span className="text-sm truncate font-medium">De: {coleta.oferta_residuo?.usuario?.razao_social || coleta.oferta_residuo?.usuario?.name || 'Fábrica Parceira'}</span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-gray-500">
-                              Reservado em {formatarData(coleta.data_reserva)}
-                            </span>
+                          <div className="flex justify-between items-end">
+                            <div className="flex flex-col gap-1">
+                              <span className="text-xs text-gray-500">
+                                Reservado em {formatarData(coleta.data_reserva)}
+                              </span>
+                              {coleta.data_agendamento && (
+                                <span className="text-xs font-bold text-primary">
+                                  Agendado: {formatarDataHora(coleta.data_agendamento)}
+                                </span>
+                              )}
+                            </div>
                             <div>
                               <Button icon="pi pi-angle-right" rounded text severity="secondary" />
                             </div>

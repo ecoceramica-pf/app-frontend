@@ -9,6 +9,13 @@ export const ColetaCard = ({ coleta, onGerenciar, getStatusClass }) => {
     }).format(new Date(isoDate));
   };
 
+  const formatarDataHora = (isoDate) => {
+    if (!isoDate) return '';
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    }).format(new Date(isoDate)).replace(',', ' às');
+  };
+
   const isCortante = coleta.oferta_residuo?.material?.cortante;
   const isAltoVolume = (coleta.oferta_residuo?.quantidade_cacamba > 0) || (coleta.oferta_residuo?.quantidade_kg > 500);
   
@@ -65,10 +72,15 @@ export const ColetaCard = ({ coleta, onGerenciar, getStatusClass }) => {
 
       {/* Card Footer */}
       <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 mt-auto flex flex-col gap-3">
-        <div className="flex justify-between items-center w-full">
+        <div className="flex flex-col gap-1 w-full">
           <span className="text-xs font-medium text-gray-500">
             Reservado em {formatarData(coleta.data_reserva)}
           </span>
+          {coleta.data_agendamento && (
+            <span className="text-xs font-bold text-primary">
+              Agendado para {formatarDataHora(coleta.data_agendamento)}
+            </span>
+          )}
         </div>
         <Button 
           label="Gerenciar Agendamento" 
