@@ -31,8 +31,8 @@ export const FabricaDashboard = () => {
   };
 
   const totalOfertas = ofertas.length;
-  const coletasConcluidas = ofertas.filter(o => o.status === 'Concluido').length;
-  const kgReutilizados = ofertas.filter(o => o.status === 'Concluido').reduce((acc, curr) => acc + (Number(curr.quantidade_kg) || 0), 0);
+  const coletasConcluidas = ofertas.filter(o => o.status?.toLowerCase() === 'concluido').length;
+  const kgReutilizados = ofertas.filter(o => o.status?.toLowerCase() === 'concluido').reduce((acc, curr) => acc + (Number(curr.quantidade_kg) || 0), 0);
   const displayUserName = user?.razao_social || user?.nome || user?.name || 'Fábrica';
 
   // Get current page items

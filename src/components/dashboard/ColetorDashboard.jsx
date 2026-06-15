@@ -25,7 +25,7 @@ export const ColetorDashboard = () => {
     setLoading(true);
     try {
       const [ofertasData, coletasData] = await Promise.all([
-        ofertasService.listarOfertas({ status: 'Disponivel' }),
+        ofertasService.listarOfertas({ status: 'disponivel' }),
         coletasService.minhasColetas()
       ]);
       
@@ -39,8 +39,8 @@ export const ColetorDashboard = () => {
   };
 
   const totalOfertas = ofertasDisponiveis.length;
-  const coletasAtivas = minhasColetas.filter(c => ['Agendado', 'Em Processo', 'Pendente'].includes(c.status)).length;
-  const kgColetados = minhasColetas.filter(c => c.status === 'Concluido').reduce((acc, curr) => acc + (Number(curr.oferta_residuo?.quantidade_kg) || 0), 0);
+  const coletasAtivas = minhasColetas.filter(c => ['agendado', 'pendente'].includes(c.status?.toLowerCase())).length;
+  const kgColetados = minhasColetas.filter(c => c.status?.toLowerCase() === 'concluido').reduce((acc, curr) => acc + (Number(curr.oferta_residuo?.quantidade_kg) || 0), 0);
   const displayUserName = user?.nome || user?.name || 'Coletor';
 
   // Get current page items
@@ -139,12 +139,12 @@ export const ColetorDashboard = () => {
             </div>
 
             {/* Metric 3 */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 border-l-4 border-l-purple-500 p-6 shadow-sm flex items-center justify-between">
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 border-l-4 border-l-secondary p-6 shadow-sm flex items-center justify-between">
                <div>
                   <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total Coletado (kg)</p>
-                  <p className="text-3xl font-bold text-purple-500">{kgColetados}</p>
+                  <p className="text-3xl font-bold text-secondary">{kgColetados}</p>
                </div>
-               <i className="pi pi-sync text-purple-500 text-4xl opacity-20"></i>
+               <i className="pi pi-sync text-secondary text-4xl opacity-20"></i>
             </div>
          </div>
 
