@@ -16,6 +16,7 @@ import { ForgotPassword } from '../pages/ForgotPassword';
 import { ResetPassword } from '../pages/ResetPassword';
 import { Historico } from '../pages/Historico';
 import { AgendamentosFabrica } from '../pages/AgendamentosFabrica';
+import { MeuImpacto } from '../pages/MeuImpacto';
 import { AppLayout } from '../components/layout/AppLayout';
 
 const PrivateRoute = ({ children }) => {
@@ -147,6 +148,17 @@ export const AppRoutes = () => {
             <PrivateRoute>
               <AppLayout>
                 <Historico />
+              </AppLayout>
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/meu-impacto" 
+          element={
+            <PrivateRoute>
+              <AppLayout>
+                <MeuImpacto />
               </AppLayout>
             </PrivateRoute>
           } 

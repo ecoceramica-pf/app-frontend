@@ -107,7 +107,10 @@ export const ColetorDashboard = () => {
             </div>
 
             {/* Action 4 */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-primary transition-all duration-200 group flex flex-col items-start cursor-pointer">
+            <div 
+              className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:-translate-y-1 hover:border-primary transition-all duration-200 group flex flex-col items-start cursor-pointer"
+              onClick={() => navigate('/meu-impacto')}
+            >
               <div className="w-12 h-12 rounded-full bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors mb-4">
                 <i className="pi pi-chart-line text-xl"></i>
               </div>
