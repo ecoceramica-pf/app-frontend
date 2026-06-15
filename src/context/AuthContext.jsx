@@ -14,12 +14,23 @@ export const AuthProvider = ({ children }) => {
         const responseData = await authService.getMe();
         setUser(responseData.data);
       } catch (error) {
-        console.error('Usuário não autenticado', error);
+        console.warn('Usuário não autenticado no load inicial ou sessão expirada.', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     loadUserFromStorage();
+    
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+
+    window.addEventListener('auth-unauthorized', handleUnauthorized);
+    return () => {
+      window.removeEventListener('auth-unauthorized', handleUnauthorized);
+    };
   }, []);
 
   const login = async (email, password) => {
@@ -40,9 +51,10 @@ export const AuthProvider = ({ children }) => {
     try {
       await authService.logout();
     } catch (error) {
-      console.error('Erro ao fazer logout', error);
+      console.error('Erro ao fazer logout no servidor', error);
+    } finally {
+      setUser(null);
     }
-    setUser(null);
   };
 
   const reloadUser = async () => {

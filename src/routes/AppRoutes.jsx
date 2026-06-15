@@ -17,6 +17,7 @@ import { ResetPassword } from '../pages/ResetPassword';
 import { Historico } from '../pages/Historico';
 import { AgendamentosFabrica } from '../pages/AgendamentosFabrica';
 import { MeuImpacto } from '../pages/MeuImpacto';
+import { NotFound } from '../pages/NotFound';
 import { AppLayout } from '../components/layout/AppLayout';
 
 const PrivateRoute = ({ children }) => {
@@ -164,7 +165,7 @@ export const AppRoutes = () => {
           } 
         />
         
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

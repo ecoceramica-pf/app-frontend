@@ -40,7 +40,10 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-surface via-white to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4 transition-colors duration-300 font-sans">
+    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-surface via-white to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 p-4 transition-colors duration-300 font-sans relative">
+      <Link to="/" className="absolute top-6 left-6 text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors flex items-center gap-2 font-semibold">
+        <i className="pi pi-arrow-left"></i> Voltar ao site
+      </Link>
       <Toast ref={toast} />
       
       <Card 

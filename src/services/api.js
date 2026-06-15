@@ -27,7 +27,8 @@ api.interceptors.response.use(
   (error) => {
     // 401 indica que o usuário não está logado (cookie de sessão inválido/ausente)
     if (error.response && error.response.status === 401) {
-      // Lógica de deslogar via AuthContext ou redirecionamento já acontece lá
+      // Dispara um evento global para que o AuthContext intercepte e faça o logout local
+      window.dispatchEvent(new Event('auth-unauthorized'));
     }
     return Promise.reject(error);
   }
