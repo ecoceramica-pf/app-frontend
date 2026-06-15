@@ -12,7 +12,7 @@ export const AgendamentosFabrica = () => {
   const navigate = useNavigate();
   const [agendamentos, setAgendamentos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filtroStatus, setFiltroStatus] = useState('agendado');
+  const [filtroStatus, setFiltroStatus] = useState('pendente');
   const [first, setFirst] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
 
